@@ -4,16 +4,18 @@
   import { Route as NotFoundRoute } from "@/routes/not-found"
 import NotFoundPage from "@/pages/NotFoundPage";
 import { useUser } from "@/hooks/useUser";
+import { useAuthStore } from "@/store/useAuthStore";
 
   export const Route = createRootRoute({
     component: () => {
       useUser();
+      const user = useAuthStore().user;
       return (
       <>
         <Navbar />
-          <main className="min-h-screen">
-              <Outlet />
-          </main>
+        <main className={`min-h-screen ${user ? "pt-14" : ""}`}>
+            <Outlet />
+        </main>
         <Footer />
       </>
     )

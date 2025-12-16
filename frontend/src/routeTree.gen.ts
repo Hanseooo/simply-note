@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as RoadmapsRouteImport } from './routes/roadmaps'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as QuizzesRouteImport } from './routes/quizzes'
+import { Route as NotesRouteImport } from './routes/notes'
 import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
@@ -21,9 +24,24 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
   path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoadmapsRoute = RoadmapsRouteImport.update({
+  id: '/roadmaps',
+  path: '/roadmaps',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizzesRoute = QuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotFoundRoute = NotFoundRouteImport.update({
@@ -52,7 +70,10 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
+  '/notes': typeof NotesRoute
+  '/quizzes': typeof QuizzesRoute
   '/register': typeof RegisterRoute
+  '/roadmaps': typeof RoadmapsRoute
   '/verify-email': typeof VerifyEmailRoute
 }
 export interface FileRoutesByTo {
@@ -60,7 +81,10 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
+  '/notes': typeof NotesRoute
+  '/quizzes': typeof QuizzesRoute
   '/register': typeof RegisterRoute
+  '/roadmaps': typeof RoadmapsRoute
   '/verify-email': typeof VerifyEmailRoute
 }
 export interface FileRoutesById {
@@ -69,7 +93,10 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
+  '/notes': typeof NotesRoute
+  '/quizzes': typeof QuizzesRoute
   '/register': typeof RegisterRoute
+  '/roadmaps': typeof RoadmapsRoute
   '/verify-email': typeof VerifyEmailRoute
 }
 export interface FileRouteTypes {
@@ -79,17 +106,32 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/not-found'
+    | '/notes'
+    | '/quizzes'
     | '/register'
+    | '/roadmaps'
     | '/verify-email'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/login' | '/not-found' | '/register' | '/verify-email'
+  to:
+    | '/'
+    | '/home'
+    | '/login'
+    | '/not-found'
+    | '/notes'
+    | '/quizzes'
+    | '/register'
+    | '/roadmaps'
+    | '/verify-email'
   id:
     | '__root__'
     | '/'
     | '/home'
     | '/login'
     | '/not-found'
+    | '/notes'
+    | '/quizzes'
     | '/register'
+    | '/roadmaps'
     | '/verify-email'
   fileRoutesById: FileRoutesById
 }
@@ -98,7 +140,10 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   NotFoundRoute: typeof NotFoundRoute
+  NotesRoute: typeof NotesRoute
+  QuizzesRoute: typeof QuizzesRoute
   RegisterRoute: typeof RegisterRoute
+  RoadmapsRoute: typeof RoadmapsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
@@ -111,11 +156,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/roadmaps': {
+      id: '/roadmaps'
+      path: '/roadmaps'
+      fullPath: '/roadmaps'
+      preLoaderRoute: typeof RoadmapsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quizzes': {
+      id: '/quizzes'
+      path: '/quizzes'
+      fullPath: '/quizzes'
+      preLoaderRoute: typeof QuizzesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/not-found': {
@@ -154,7 +220,10 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   NotFoundRoute: NotFoundRoute,
+  NotesRoute: NotesRoute,
+  QuizzesRoute: QuizzesRoute,
   RegisterRoute: RegisterRoute,
+  RoadmapsRoute: RoadmapsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport
