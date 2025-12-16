@@ -9,7 +9,7 @@ export const useLogout = () => {
     mutationFn: logoutApi,
     onSuccess: () => {
       clearAuth();
-      window.location.href = "/login";
+      window.location.href = "/";
     },
   });
 };
