@@ -12,17 +12,92 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
+// import { useAuthStore } from "@/store/useAuthStore";
+import { useRegister } from "@/hooks/useRegister";
+import type { RegisterPayload } from "@/types/apiPayloads";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password1, setPassword1] = useState("")
+  const [password2, setPassword2] = useState("");
+//   const setAuth = useAuthStore((s) => s.setAuth)
+  const register = useRegister()
+
+    function handleSubmit() {
+    if (password1 !== password2) {
+        toast.error("Passwords do not match");
+        return;
+    }
+
+    if (password1.length < 8) {
+        toast.error("Password must be at least 8 characters");
+        return;
+    }
+
+    if (!email.includes("@")) {
+        toast.error("Enter a valid email address");
+        return;
+    }
+
+    if (username.trim().length < 3) {
+        toast.error("Username should be at least 3 characters");
+        return;
+    }
+
+    if (username.includes(" ") || email.includes(" ")) {
+        toast.error("Spaces in username or email are not allowed");
+        return;
+    }
+
+    const payload: RegisterPayload = {
+        username,
+        email,
+        password1,
+        password2,
+    };
+
+    register.mutate(payload, {
+        onSuccess: (data) => {
+        // Backend should return the verification key
+        const key = data.key;
+        if (!key) {
+            toast.error("Registration succeeded but no verification key returned.");
+            return;
+        }
+
+        toast.success("Registration successful! Please verify your email.");
+        navigate({ to: `/verify-email?key=${key}` });
+        },
+        onError: (error: any) => {
+        // Handles backend validation errors
+        if (error.response?.data) {
+            const errData = error.response.data;
+            if (errData.username) {
+            toast.error(`Username error: ${errData.username.join(", ")}`);
+            }
+            if (errData.email) {
+            toast.error(`Email error: ${errData.email.join(", ")}`);
+            }
+            if (errData.password1) {
+            toast.error(`Password error: ${errData.password1.join(", ")}`);
+            }
+            return;
+        }
+        toast.error(`Registration Error: ${error.message || "Unknown error"}`);
+        },
+    });
+    }
+
 
   return (
     <motion.div
       className="min-h-screen flex items-center justify-center bg-radial from-primary/10 px-4"
-      initial={{ opacity: 0, }}
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
@@ -47,13 +122,25 @@ export default function RegisterPage() {
           {/* Username */}
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
-            <Input id="username" type="text" placeholder="yourusername" />
+            <Input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              id="username"
+              type="text"
+              placeholder="yourusername"
+            />
           </div>
 
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" />
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+            />
           </div>
 
           {/* Password */}
@@ -65,6 +152,8 @@ export default function RegisterPage() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="pr-10"
+                value={password1}
+                onChange={(e) => setPassword1(e.target.value)}
               />
               <button
                 type="button"
@@ -89,6 +178,8 @@ export default function RegisterPage() {
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="pr-10"
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
               />
               <button
                 type="button"
@@ -104,7 +195,7 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <Button className="w-full">Create account</Button>
+          <Button onClick={() => handleSubmit()} className="w-full">Create account</Button>
 
           <div className="text-center mt-2 text-sm text-muted-foreground">
             Already have an account?{" "}

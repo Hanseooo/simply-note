@@ -11,3 +11,4 @@ declare module "@tanstack/react-router" {
         router: typeof router
     }
 }
+

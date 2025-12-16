@@ -1,0 +1,15 @@
+Hello {{USERNAME}},
+
+Welcome to Simply Note! Please verify your email address to start using your account.
+
+Your verification code: {{VERIFICATION_CODE}}
+
+Or click the link below to verify your email:
+{{VERIFY_URL}}
+
+This code is only valid for 10 minutes, please resend verification code if code is expired.
+
+
+If you did not sign up for Simply Note, you can safely ignore this email.
+
+© {{YEAR}} Simply Note. All rights reserved.

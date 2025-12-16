@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
+from datetime import timedelta
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,8 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x(4%tucgf08#-3($wwwo_g1x6o%bbiwi+(532dgs6tckfd8-9%'
-
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -30,7 +36,45 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:5173",
+
 ]
+
+from decouple import config 
+
+FRONTEND_BASE_URL = config(
+    "FRONTEND_BASE_URL",
+    default="http://localhost:5173"
+)
+
+AUTH_USER_MODEL = 'users.User'
+
+DEFAULT_FROM_EMAIL = "hans.amoguis@hcdc.edu.ph"
+
+
+
+SITE_ID = 1
+
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+
+ACCOUNT_ADAPTER = "allauth.account.adapter.DefaultAccountAdapter"
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+ACCOUNT_UNIQUE_EMAIL = True
+
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER": "users.serializers.CustomRegisterSerializer",
+}
+REST_AUTH_SERIALIZERS = {
+    "LOGIN_SERIALIZER": "users.serializers.CustomLoginSerializer",
+}
+
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 
 
 # Application definition
@@ -55,9 +99,9 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.google',       # OpenAPI/Swagger documentation
 
     'api',
+    'users',
 ]
 
-SITE_ID = 1 
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  
@@ -96,21 +140,40 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'simply_note_db',
+        'USER': 'postgres',
+        'PASSWORD': 'qwerty1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',     # Default
-    'allauth.account.auth_backends.AuthenticationBackend', # Allauth
+    "users.auth_backends.UsernameOrEmailBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
+
 
 REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'my-app-auth',
     'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'TOKEN_MODEL': None,
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+REST_USE_JWT = True
+JWT_AUTH_HTTPONLY = False  # IMPORTANT (localStorage)
+
 
 
 
@@ -118,15 +181,15 @@ REST_AUTH = {
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
