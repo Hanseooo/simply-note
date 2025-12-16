@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload } from "lucide-react";
 import { extractPdfText } from "@/lib/extractPdfText";
+import { useSummarize } from "@/hooks/useSummarize";
+import LoadingScreen from "@/components/layout/Loading";
 
 const MIN_CHARS = 120;
 const MAX_CHARS = 5120;
@@ -16,6 +18,8 @@ export default function NoteSummarizer() {
   const [pdfText, setPdfText] = useState("");
   const [loading, setLoading] = useState(false);
   const [textInput, setTextInput] = useState("")
+
+  const summarize = useSummarize();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -44,6 +48,14 @@ export default function NoteSummarizer() {
 
   return (
     <section className="relative min-h-[62vh] mb-12 w-full max-w-3xl mx-auto mt-10 px-4">
+      {summarize.isPending && (
+        <LoadingScreen
+          overlay
+          title="Summarizing your notes"
+          description="This usually takes a few seconds."
+        />
+      )}
+
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
         <TabsList className="mx-auto mb-6">
           <TabsTrigger value="text">Text</TabsTrigger>
@@ -80,18 +92,22 @@ export default function NoteSummarizer() {
             <p className="text-xs text-muted-foreground">
               Text must be between{" "}
               <span className="font-medium text-primary">120</span> and{" "}
-              <span className="font-medium text-primary">2560</span>{" "}
-              characters.
+              <span className="font-medium text-primary">2560</span> characters.
             </p>
           </div>
 
           <div className="flex justify-end">
             <Button
-              variant="secondary"
-              className="border border-primary bg-primary/15 hover:bg-primary/10"
-              disabled={isInvalid}
+              disabled={isInvalid || summarize.isPending}
+              onClick={() =>
+                summarize.mutate(
+                  {
+                    text: textInput,
+                  },
+                )
+              }
             >
-              Summarize Text
+              {summarize.isPending ? "Summarizing…" : "Summarize Text"}
             </Button>
           </div>
         </TabsContent>
@@ -142,11 +158,16 @@ export default function NoteSummarizer() {
 
           <div className="flex justify-end">
             <Button
-              disabled={!pdfText || loading}
-              variant="secondary"
-              className="border border-primary bg-primary/15 hover:bg-primary/10"
+              disabled={!pdfText || loading || summarize.isPending}
+              onClick={() =>
+                summarize.mutate(
+                  {
+                    text: pdfText,
+                  },
+                )
+              }
             >
-              {loading ? "Extracting…" : "Summarize PDF"}
+              {summarize.isPending ? "Summarizing…" : "Summarize PDF"}
             </Button>
           </div>
         </TabsContent>

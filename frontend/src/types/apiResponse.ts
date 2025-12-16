@@ -20,3 +20,12 @@ export type VerifyEmailResponse = {
   user: User
 };
 
+export type SummarizedNote = {
+  title: string;
+  description: string;
+  markdown: string;
+  key_points: string[];
+  topics: string[];
+  difficulty: "beginner" | "intermediate" | "advanced";
+  word_count: number;
+};

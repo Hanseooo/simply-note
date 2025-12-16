@@ -5,6 +5,7 @@ export default function SavedNotes() {
 
       const summaryMarkdown = `
 # Summary of Notes
+---
 
 Here’s the main idea of your notes:
 
@@ -17,15 +18,13 @@ function helloWorld() {
 - Key point 1
 - Key point 2
 
-## anoooo
-
-
 ---
+
 
   `;
 
     return(
-        <main className="min-h-[64vh] mb-12">
+        <main className="min-h-[64vh] mb-12 py-4">
             <MarkdownRenderer content={summaryMarkdown} />
         </main>
     )
