@@ -1,4 +1,5 @@
 import { requireAuth } from '@/guards/authGuard'
+import RoadmapPage from '@/pages/RoadmapPage'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/roadmaps')({
@@ -7,5 +8,5 @@ export const Route = createFileRoute('/roadmaps')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/roadmaps"!</div>
+  return <RoadmapPage />
 }

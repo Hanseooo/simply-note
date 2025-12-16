@@ -1,4 +1,5 @@
 import { requireAuth } from '@/guards/authGuard'
+import QuizPage from '@/pages/QuizPage'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/quizzes')({
@@ -7,5 +8,5 @@ export const Route = createFileRoute('/quizzes')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/quizzes"!</div>
+  return <QuizPage />
 }

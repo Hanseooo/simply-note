@@ -1,4 +1,5 @@
 import { requireAuth } from '@/guards/authGuard'
+import NotesPage from '@/pages/NotesPage'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/notes')({
@@ -7,5 +8,5 @@ export const Route = createFileRoute('/notes')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/notes"!</div>
+  return <NotesPage />
 }

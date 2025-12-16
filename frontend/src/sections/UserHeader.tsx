@@ -17,7 +17,7 @@ const greetings = [
   "Small steps today lead to big results over time.",
 ];
 
-export default function GreetingSection() {
+export default function UserHeader() {
   const user = useAuthStore((s) => s.user);
 
   // Random greeting, stable per render
@@ -46,7 +46,7 @@ export default function GreetingSection() {
       </div>
 
       {/* Subtle accent divider */}
-      <div className="h-px w-full bg-linear-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="h-px w-full bg-linear-to-r from-transparent via-primary/50 to-transparent" />
     </motion.section>
   );
 }
