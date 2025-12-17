@@ -100,6 +100,8 @@ INSTALLED_APPS = [
 
     'api',
     'users',
+    "ai",
+    "summaries",
 ]
 
 
@@ -221,6 +223,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    "DEFAULT_THROTTLE_RATES": {
+        "ai_summarize_burst": "5/min",
+    },
 }
 
 # Swagger UI Settings

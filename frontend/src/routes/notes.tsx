@@ -1,12 +1,12 @@
-import { requireAuth } from '@/guards/authGuard'
-import NotesPage from '@/pages/NotesPage'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import NotesPage from "@/pages/NotesPage";
+import { requireAuth } from "@/guards/authGuard";
 
-export const Route = createFileRoute('/notes')({
-  component: RouteComponent,
+export const Route = createFileRoute("/notes")({
+  component: NotesRouteComponent,
   beforeLoad: requireAuth(),
-})
+});
 
-function RouteComponent() {
-  return <NotesPage />
+function NotesRouteComponent() {
+  return <NotesPage />;
 }
