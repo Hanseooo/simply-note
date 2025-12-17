@@ -8,8 +8,8 @@ import { extractPdfText } from "@/lib/extractPdfText";
 import { useSummarize } from "@/hooks/useSummarize";
 import LoadingScreen from "@/components/layout/Loading";
 
-const MIN_CHARS = 120;
-const MAX_CHARS = 5120;
+const MIN_CHARS = 512;
+const MAX_CHARS = 7680;
 
 
 export default function NoteSummarizer() {
@@ -91,8 +91,8 @@ export default function NoteSummarizer() {
             {/* Helper text */}
             <p className="text-xs text-muted-foreground">
               Text must be between{" "}
-              <span className="font-medium text-primary">120</span> and{" "}
-              <span className="font-medium text-primary">2560</span> characters.
+              <span className="font-medium text-primary">{MIN_CHARS}</span> and{" "}
+              <span className="font-medium text-primary">{MAX_CHARS}</span> characters.
             </p>
           </div>
 

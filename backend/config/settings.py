@@ -101,6 +101,7 @@ INSTALLED_APPS = [
     'api',
     'users',
     "ai",
+    "summaries",
 ]
 
 

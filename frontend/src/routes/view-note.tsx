@@ -17,5 +17,5 @@ function ViewNoteRoute() {
     throw redirect({ to: "/notes" }); // If no cache, go back to notes
   }
 
-  return <ViewNotePage data={data} isSaved={false} />;
+  return <ViewNotePage data={data} />;
 }

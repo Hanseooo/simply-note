@@ -28,25 +28,27 @@ export default function UserHeader() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="w-full border-b bg-linear-to-tr from-background to-primary/5"
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="w-full border-b py-10 px-4 bg-linear-to-tr from-background to-primary/5"
     >
-      <div className="mx-auto max-w-7xl px-4 py-10">
-        <p className="text-sm text-muted-foreground">{getTimeGreeting()},</p>
+      <div className="mx-auto max-w-7xl text-center">
+        <p className="text-lg font-medium text-muted-foreground">
+          {getTimeGreeting()},
+        </p>
 
-        <h1 className="mt-1 text-2xl font-semibold text-primary tracking-tight sm:text-3xl">
+        <h1 className="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-primary">
           {user?.username}
         </h1>
 
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+        <p className="mt-4 max-w-3xl mx-auto text-lg sm:text-xl font-semibold text-muted-foreground">
           {greetingMessage}
         </p>
       </div>
 
-      {/* Subtle accent divider */}
-      <div className="h-px w-full bg-linear-to-r from-transparent via-primary/50 to-transparent" />
+      {/* Bold accent divider */}
+      <div className="mt-6 h-1 w-2/3 mx-auto rounded-full bg-linear-to-r from-transparent via-primary/60 to-transparent" />
     </motion.section>
   );
 }
