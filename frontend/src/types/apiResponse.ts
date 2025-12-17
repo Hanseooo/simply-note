@@ -57,3 +57,19 @@ export interface SavedSummaryListItem {
 
   is_pinned: boolean;
 }
+
+export interface Roadmap {
+  title: string;
+  description: string;
+  markdown: string;
+  diagram: {
+    type: "flowchart" | "gantt" | "timeline";
+    code: string;
+  };
+  milestones: [
+    {
+      title: string;
+      description: string;
+    },
+  ];
+}

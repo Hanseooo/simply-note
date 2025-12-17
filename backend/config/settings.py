@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     'users',
     "ai",
     "summaries",
+    "roadmaps",
 ]
 
 
