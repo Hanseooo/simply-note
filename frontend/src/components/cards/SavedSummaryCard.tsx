@@ -23,10 +23,12 @@ import { Separator } from "@/components/ui/separator";
 import { Pin, Share2, Trash2, Copy, User, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import type { SavedSummaryListItem } from "@/types/apiResponse";
+import { useFetchSummaryByCode } from "@/hooks/useFetchSummaryByCode";
 
 type Props = {
   item: SavedSummaryListItem;
   onTogglePin?: (id: string) => void;
+  onDelete?: (id: string) => void
 };
 
 const difficultyColor = {
@@ -35,7 +37,10 @@ const difficultyColor = {
   advanced: "bg-rose-500/15 text-rose-600",
 };
 
-export default function SavedSummaryCard({ item, onTogglePin }: Props) {
+export default function SavedSummaryCard({ item, onTogglePin, onDelete }: Props) {
+
+    const { fetchByCode, isFetching } = useFetchSummaryByCode()
+
   function copyShareCode() {
     navigator.clipboard.writeText(item.share_code);
     toast.success("Share code copied");
@@ -149,7 +154,7 @@ export default function SavedSummaryCard({ item, onTogglePin }: Props) {
             {/* Delete */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost">
+                <Button size="icon" variant="ghost" onClick={() => onDelete?.(item.id)}>
                   <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
               </TooltipTrigger>
@@ -159,7 +164,10 @@ export default function SavedSummaryCard({ item, onTogglePin }: Props) {
         </CardContent>
 
         <CardFooter>
-          <Button className="w-full font-medium">Open note</Button>
+          <Button className="w-full font-medium"
+          onClick={() => fetchByCode(item.share_code)}
+          disabled = {isFetching}
+          >Open note</Button>
         </CardFooter>
       </Card>
     </motion.div>

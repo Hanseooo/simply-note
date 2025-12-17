@@ -39,11 +39,11 @@ export const useSummary = () => {
   const unsaveMutation = useMutation({
     mutationFn: (summaryId: string) => unsaveSummaryApi(summaryId),
     onSuccess: () => {
-      toast.success("Summary removed");
+      toast.success("Removed from saved notes");
 
       queryClient.invalidateQueries({ queryKey: ["saved-summaries"] });
     },
-    onError: () => toast.error("Unable to remove summary"),
+    onError: () => toast.error("Unable to remove note"),
   });
 
   // PIN
@@ -63,9 +63,6 @@ export const useSummary = () => {
       queryClient.invalidateQueries({ queryKey: ["saved-summaries"] });
     },
   });
-
-
-
   
 
   return {

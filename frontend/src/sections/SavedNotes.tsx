@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { BookOpen } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 
 const PAGE_SIZE_MOBILE = 3;
 const PAGE_SIZE_TABLET = 6;
@@ -30,7 +31,7 @@ const difficultyRank = {
 
 export default function SavedNotesSection() {
   const { savedSummaries, isLoading } = useSavedSummaries();
-  const { pinSummary, unpinSummary } = useSummary();
+  const { pinSummary, unpinSummary, unsaveSummary } = useSummary();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_DESKTOP);
@@ -88,9 +89,7 @@ export default function SavedNotesSection() {
     setCurrentPage(1);
   }, [pageSize, sort]);
 
-  /* -------------------------------
-     Pin toggle handler
-  -------------------------------- */
+
   function handleTogglePin(id: string) {
     const note = savedSummaries.find((n) => n.id === id);
     if (!note) return;
@@ -141,11 +140,13 @@ export default function SavedNotesSection() {
         <>
           <AnimatePresence>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <ShareCodeButtonCard />
               {paginatedNotes.map((item) => (
                 <SavedSummaryCard
                   key={item.id}
                   item={item}
                   onTogglePin={handleTogglePin}
+                  onDelete={unsaveSummary}
                 />
               ))}
             </div>

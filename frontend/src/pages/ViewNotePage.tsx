@@ -13,6 +13,7 @@ import { useSummary } from "@/hooks/useSummary";
 import type { SummarizedNote } from "@/types/apiResponse";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Bookmark } from "lucide-react";
+import { useEffect } from "react";
 
 type ViewNotePageProps = {
   data: SummarizedNote;
@@ -22,11 +23,15 @@ export default function ViewNotePage({
   data,
 }: ViewNotePageProps) {
   const navigate = useNavigate();
-  const { saveSummary, unsaveSummary, pinSummary, unpinSummary, isSaving } =useSummary();
+  const { saveSummary, unsaveSummary, isSaving } =useSummary();
+
+  useEffect(() => {
+    window.scrollTo(0,0)
+  },[])
 
   const canSave = data.is_saved !== true;
   const canUnsave = data.is_saved === true;
-  const isPinned = data.is_pinned === true;
+
 
 
 
@@ -95,27 +100,9 @@ export default function ViewNotePage({
                   variant="destructive"
                   onClick={() => unsaveSummary(data.id)}
                 >
-                  Remove
+                  Remove from saved notes
                 </Button>
               )}
-
-              {canUnsave &&
-                data.id &&
-                (isPinned ? (
-                  <Button
-                    variant="secondary"
-                    onClick={() => unpinSummary(data.id)}
-                  >
-                    Unpin
-                  </Button>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    onClick={() => pinSummary(data.id)}
-                  >
-                    Pin
-                  </Button>
-                ))}
             </div>
           </CardFooter>
         </Card>
