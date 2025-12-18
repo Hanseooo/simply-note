@@ -23,20 +23,19 @@ export default function ViewNotePage({
   data,
 }: ViewNotePageProps) {
   const navigate = useNavigate();
-  const { saveSummary, unsaveSummary, isSaving } =useSummary();
+  const { saveSummary, isSaving } =useSummary();
 
   useEffect(() => {
     window.scrollTo(0,0)
   },[])
 
   const canSave = data.is_saved !== true;
-  const canUnsave = data.is_saved === true;
 
 
 
 
   return (
-    <section className="mx-auto w-full py-6 space-y-6">
+    <section className="mx-auto w-full py-6 space-y-6 bg-radial from-primary/10">
       {/* Page title */}
       <TitleHeader
         titleWord1=""
@@ -92,15 +91,6 @@ export default function ViewNotePage({
                 >
                   <Bookmark className="h-4 w-4" />
                   Save
-                </Button>
-              )}
-
-              {canUnsave && data.id && (
-                <Button
-                  variant="destructive"
-                  onClick={() => unsaveSummary(data.id)}
-                >
-                  Remove from saved notes
                 </Button>
               )}
             </div>

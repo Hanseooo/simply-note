@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSavedSummaries } from "@/hooks/useSavedSummaries";
-import { useSummary } from "@/hooks/useSummary";
-import SavedSummaryCard from "@/components/cards/SavedSummaryCard";
-import { useFetchSummaryByCode } from "@/hooks/useFetchSummaryByCode";
+import { AnimatePresence } from "framer-motion";
+import { Map } from "lucide-react";
+import { useFetchRoadmapByCode } from "@/hooks/useFetchRoadmapByCode";
+
+import { useSavedRoadmaps } from "@/hooks/useSavedRoadmaps";
+
 import {
   Pagination,
   PaginationContent,
@@ -13,29 +15,20 @@ import {
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { BookOpen, Notebook } from "lucide-react";
-import { AnimatePresence } from "framer-motion";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
+import SavedRoadmapCard from "@/components/cards/savedRoadmapCard";
 
 const PAGE_SIZE_MOBILE = 3;
 const PAGE_SIZE_TABLET = 6;
 const PAGE_SIZE_DESKTOP = 9;
 
-type SortOption = "recent" | "difficulty";
+type SortOption = "recent";
 
-const difficultyRank = {
-  beginner: 1,
-  intermediate: 2,
-  advanced: 3,
-};
-
-export default function SavedNotesSection() {
-  const { savedSummaries, isLoading } = useSavedSummaries();
-  const { unsaveSummary } = useSummary();
-
+export default function SavedRoadmaps() {
+  const { savedRoadmaps, isLoading } = useSavedRoadmaps();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_DESKTOP);
-  const [sort, ] = useState<SortOption>("recent");
+  const [sort] = useState<SortOption>("recent");
 
   /* -------------------------------
      Responsive page size
@@ -54,10 +47,10 @@ export default function SavedNotesSection() {
   }, []);
 
   /* -------------------------------
-     Sorting logic (PIN FIRST)
+     Sorting (PIN FIRST)
   -------------------------------- */
-  const sortedNotes = useMemo(() => {
-    return [...savedSummaries]
+  const sortedRoadmaps = useMemo(() => {
+    return [...savedRoadmaps]
       .sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned))
       .sort((a, b) => {
         if (sort === "recent") {
@@ -65,26 +58,21 @@ export default function SavedNotesSection() {
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
           );
         }
-
-        if (sort === "difficulty") {
-          return difficultyRank[b.difficulty] - difficultyRank[a.difficulty];
-        }
-
         return 0;
       });
-  }, [savedSummaries, sort]);
+  }, [savedRoadmaps, sort]);
 
   /* -------------------------------
      Pagination
   -------------------------------- */
-  const totalPages = Math.ceil(sortedNotes.length / pageSize);
+  const totalPages = Math.ceil(sortedRoadmaps.length / pageSize);
 
-  const paginatedNotes = useMemo(() => {
+  const paginatedRoadmaps = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
-    return sortedNotes.slice(start, start + pageSize);
-  }, [sortedNotes, currentPage, pageSize]);
+    return sortedRoadmaps.slice(start, start + pageSize);
+  }, [sortedRoadmaps, currentPage, pageSize]);
 
-  /* Reset page when layout changes */
+  /* Reset page on layout change */
   useEffect(() => {
     setCurrentPage(1);
   }, [pageSize, sort]);
@@ -95,10 +83,10 @@ export default function SavedNotesSection() {
       {/* Header */}
       <div className="mb-6 space-y-2">
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Saved Notes
+          Saved Roadmaps
         </h2>
         <p className="text-sm text-muted-foreground">
-          Your summarized notes, organized and ready to review.
+          Your saved learning roadmaps, organized for easy access.
         </p>
       </div>
 
@@ -108,41 +96,38 @@ export default function SavedNotesSection() {
       {isLoading && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: pageSize }).map((_, i) => (
-            <Skeleton key={i} className="h-56 w-full rounded-lg" />
+            <Skeleton key={i} className="h-60 w-full rounded-lg" />
           ))}
         </div>
       )}
 
       {/* Empty */}
-      {!isLoading && sortedNotes.length === 0 && (
+      {!isLoading && sortedRoadmaps.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-20 text-center">
-          <BookOpen className="mb-3 h-10 w-10 text-muted-foreground" />
-          <h3 className="text-lg font-semibold">No saved notes yet</h3>
+          <Map className="mb-3 h-10 w-10 text-muted-foreground" />
+          <h3 className="text-lg font-semibold">No saved roadmaps yet</h3>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Summarize a note and save it to build your study library.
+            Save a roadmap to keep track of your learning plans.
           </p>
         </div>
       )}
 
-      {/* Notes grid */}
-      {!isLoading && paginatedNotes.length > 0 && (
+      {/* Grid */}
+      {!isLoading && paginatedRoadmaps.length > 0 && (
         <>
           <AnimatePresence>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <ShareCodeButtonCard
-                useFetchHook={useFetchSummaryByCode}
-                title="View Shared Note"
-                description="Enter a share code to view a note"
-                dialogTitle="View note via share code"
-                submitLabel="View Note"
-                icon={Notebook}
+                useFetchHook={useFetchRoadmapByCode}
+                title="View Shared Roadmap"
+                description="Enter a share code to view a roadmap"
+                dialogTitle="View roadmap via share code"
+                submitLabel="View Roadmap"
+                icon={Map}
               />
-              {paginatedNotes.map((item) => (
-                <SavedSummaryCard
-                  key={item.id}
-                  item={item}
-                  onDelete={unsaveSummary}
-                />
+
+              {paginatedRoadmaps.map((item) => (
+                <SavedRoadmapCard key={item.id} item={item} />
               ))}
             </div>
           </AnimatePresence>

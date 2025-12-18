@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { generateRoadmapApi } from "@/services/aiApi";
 import type { Roadmap } from "@/types/apiResponse";
+import axios from "axios";
 
 export const useGenerateRoadmap = () => {
   const queryClient = useQueryClient();
@@ -12,16 +13,39 @@ export const useGenerateRoadmap = () => {
     mutationFn: generateRoadmapApi,
 
     onSuccess: (data: Roadmap) => {
-      // Store latest generated roadmap
-      queryClient.setQueryData<Roadmap>(["latest-roadmap"], data);
+      toast.success(`Roadmap Generated: ${data.title}`);
 
-      toast.success("Roadmap generated");
+      queryClient.setQueryData(["roadmap", data.id], data);
 
-      navigate({ to: "/view-roadmap" });
+      navigate({
+        to: "/view-roadmap/$roadmapId",
+        params: { roadmapId: data.id },
+      });
     },
 
-    onError: () => {
-      toast.error("Failed to generate roadmap");
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        // Case 1: Proper HTTP 503
+        if (error.response?.status === 503) {
+          toast.error(
+            "Service is unavailable at the moment. Please try again later."
+          );
+          return;
+        }
+
+        // Case 2: Server crashed / exception (no response)
+        if (!error.response) {
+          toast.error(
+            "Service is unavailable at the moment. Please try again later."
+          );
+          return;
+        }
+      }
+
+    //   toast.error("Unable to generate roadmap");
+        toast.error(
+            "Service is unavailable at the moment. Please try again later."
+        );
     },
   });
 

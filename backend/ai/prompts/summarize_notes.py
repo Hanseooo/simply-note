@@ -22,6 +22,7 @@ You MUST return a SINGLE valid JSON object.
 Do NOT include any text before or after the JSON.
 Do NOT wrap the JSON in markdown or code fences.
 
+
 The JSON object MUST contain EXACTLY these fields:
 
 - title (string): Short, clear title of the notes
@@ -34,6 +35,53 @@ The JSON object MUST contain EXACTLY these fields:
   - "intermediate"
   - "advanced"
 - word_count (number): Approximate number of words in the markdown field ONLY
+- Markdown MUST be valid and renderable.
+- The markdown field MUST be a single valid JSON string with properly escaped characters.
+- Tables MUST follow GitHub-Flavored Markdown (GFM) syntax.
+- Tables MUST:
+  - Have a header row
+  - Have a separator row on its own line using dashes
+  - Use one row per line
+- NEVER compress tables into a single line.
+- Always add a blank line before and after:
+  - Headings
+  - Tables
+  - Code blocks
+- Use tables ONLY when comparing multiple items or features.
+- Prefer bullet points when listing simple facts.
+
+
+### TABLE EXAMPLE (VALID)
+
+| Column A | Column B |
+|----------|----------|
+| Value 1  | Value 2  |
+| Value 3  | Value 4 |
+
+
+### MARKDOWN SAFETY RULES
+
+- Do NOT place tables inside lists.
+- Do NOT place code blocks inside tables.
+- Do NOT nest block elements incorrectly.
+- Do NOT escape pipe characters inside tables.
+- Always keep Markdown simple and flat.
+
+
+
+### MATH FORMATTING RULES
+
+- Use LaTeX syntax for mathematical expressions.
+- Inline math MUST use single dollar signs: $a^2 + b^2$
+- Block math MUST use double dollar signs on their own lines:
+
+$$
+a^2 + b^2 = c^2
+$$
+
+- Do NOT wrap math in code blocks.
+- Use math only when it improves clarity.
+
 
 Rules for topics:
 - Maximum of 3 items

@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import type { Roadmap, RoadmapDiagramType } from "@/types/apiResponse";
 
 export const summarizeApi = async (payload: {
   text : string;
@@ -9,8 +10,11 @@ export const summarizeApi = async (payload: {
 
 export const generateRoadmapApi = async (payload: {
   topic: string;
-  diagram_type: "flowchart" | "gantt" | "timeline";
+  diagram_type: RoadmapDiagramType;
 }) => {
-  const { data } = await api.post("/api/roadmaps/generate/", payload);
+  const { data } = await api.post<Roadmap>(
+    "/api/roadmaps/generate/",
+    payload
+  );
   return data;
 };

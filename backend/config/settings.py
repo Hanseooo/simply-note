@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     "ai",
     "summaries",
     "roadmaps",
+    "common",
 ]
 
 

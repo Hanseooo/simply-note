@@ -17,7 +17,7 @@ JSON SCHEMA:
   "description": string,
   "markdown": string,
   "diagram": {
-    "type": "flowchart" | "gantt" | "timeline",
+    "type": "flowchart" | "timeline",
     "code": string
   },
   "milestones": [
@@ -47,7 +47,12 @@ FLOWCHART RULES:
 - Node IDs must be single uppercase letters (A, B, C, ...)
 - Node syntax: A[Label]
 - Connections must use --> only
-- Linear flow only
+- Flow MAY diverge when multiple topics can be learned independently
+- Diverging nodes must originate from a single prerequisite node
+- Diverged paths may rejoin at a later node
+- Do NOT create cycles
+- Keep the graph readable and moderately branched
+
 
 FLOWCHART EXAMPLE:
 flowchart TD
@@ -56,43 +61,42 @@ A --> B[Learn Basics]
 B --> C[Practice]
 C --> D[Build Project]
 
-GANTT RULES:
-- Header MUST be exactly: gantt
-- Must include a title line
-- Must include at least one section
-- Each task must have:
-  - A unique task ID
-  - A duration OR an after dependency
-
-GANTT DURATION RULES:
-- Use whole numbers only
-- Allowed units: d, w, m, y
-- No decimals
-- No calendar dates
-- No dateFormat or axisFormat
-- No start dates
-
-GANTT EXAMPLE:
-gantt
-    title Learning Roadmap
-    section Foundations
-    Basics :t1, 2w
-    Advanced :t2, after t1, 3w
 
 TIMELINE RULES:
 - Header MUST be exactly: timeline
 - Entry format: <Relative Time> : <Label>
 - Time labels must be capitalized
-- Entries must be chronological
+- Entries must be strictly chronological
 - No ranges
 - No symbols
 - No calendar dates
 
+TIME PROGRESSION RULES:
+- Use relative progression only
+- Do NOT jump between time units without transitional steps
+- When switching from weeks to months:
+  - Include at least one bridging entry
+  - Use formats such as:
+    - Month 1 Week 1
+    - Month 1 Early
+    - Month 1 Foundation
+- Month entries MAY include a week qualifier
+- Timeline resolution must change gradually
+- If using weekly entries, include at least 4–6 weeks before switching to months
+- Do NOT compress multiple weeks into a single month abruptly
+- Time progression must reflect realistic learning effort
+
+CONTENT STRUCTURE:
+- Group closely related topics within the same time unit when appropriate
+- Prefer more granular early stages and broader milestones later
+
+
 TIMELINE EXAMPLE:
 timeline
     Week 1 : Learn Basics
-    Month 1 : Practice Skills
-    Year 1 : Build Projects
+    Week 2 : System Design
+           : Building Projects
+    Month 1 : Learn Frameworks
 
 
 TIME VALIDATION GUARANTEES:
@@ -101,7 +105,6 @@ TIME VALIDATION GUARANTEES:
   - Year-like numbers (2020–2099)
   - Date separators (- or /)
   - Month names (January, Feb, etc.)
-- Gantt charts must use duration-based progression only
 - Timeline charts must use relative progression only
 - When unsure, prefer:
   - Week-based durations for Gantt
@@ -113,6 +116,18 @@ CONTENT RULES:
 - Include beginner → intermediate → advanced progression
 - Markdown must use headings and bullet lists
 - Keep descriptions concise but informative
+
+- Markdown must reflect the diagram type
+- If diagram type is timeline:
+  - Include approximate time context in phase headings
+- If diagram type is flowchart:
+  - Do NOT use time ranges
+  - Use learning phases and progression labels instead
+
+- When a topic requires prior knowledge, include a short Prerequisites list in markdown
+- Prerequisites must be concise and limited to essential knowledge only
+- Do NOT include prerequisites for beginner level phases
+
 
 
 FAILURE PREVENTION RULES:
@@ -148,23 +163,6 @@ Example (FLOWCHART):
   ]
 }
 
-Example (GANTT):
-
-{
-  "title": "Machine Learning Roadmap",
-  "description": "A time-based roadmap for machine learning",
-  "markdown": "## Phase 1: Math\n- Linear algebra\n\n## Phase 2: Models\n- Regression",
-  "diagram": {
-    "type": "gantt",
-    "code": "gantt\n    title Learning Timeline\n    section Foundations\n    Math Basics :a1, 4w\n    section Models\n    Regression :a2, after a1, 3w"
-  },
-  "milestones": [
-    {
-      "title": "Foundations",
-      "description": "Build mathematical understanding"
-    }
-  ]
-}
 
 Example (TIMELINE):
 
@@ -174,7 +172,7 @@ Example (TIMELINE):
   "markdown": "## Phase 1: Systems\n- Linux\n\n## Phase 2: Containers\n- Docker",
   "diagram": {
     "type": "timeline",
-    "code": "timeline\n    Week 1 : Linux Basics\n    Month 1 : Docker\n    Year 1 : Kubernetes"
+    "code": "timeline\n    Week 1 : Linux Basics\n    Week 2 : Docker\n    Month 1 : Kubernetes : Cloud Services"
   },
   "milestones": [
     {
@@ -189,14 +187,16 @@ Example (TIMELINE):
 
 def build_user_prompt(*, topic: str, diagram_type: str) -> str:
     return f"""
-Create a comprehensive learning roadmap for the topic: "{topic}"
+Create a comprehensive learning roadmap for the topic: {topic}
 
 Diagram type to generate: {diagram_type}
 
 Requirements:
-- Follow the exact JSON schema
+- Follow the exact JSON schema provided in the SYSTEM_PROMPT
 - The diagram must be a valid Mermaid {diagram_type}
-- The roadmap should be structured into clear phases
+- The roadmap should be structured into clear phases (Beginner → Intermediate → Advanced)
+- Milestones should be included where appropriate
+- Node/task names must be short, readable, and free of special characters
 - Content must be suitable for self-study
 - Do not include anything outside the JSON
 """
