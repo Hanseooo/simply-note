@@ -23,8 +23,8 @@ export const useSummary = () => {
       return saveNewSummaryApi(note);
     },
 
-    onSuccess: (data) => {
-      toast.success(`saved: ${data.title}`); // previous param: _
+    onSuccess: (_) => {
+      toast.success(`Note saved succesfully`); 
 
       queryClient.setQueryData<SummarizedNote>(["latest-summary"], (old) =>
         old ? { ...old, is_saved: true } : old

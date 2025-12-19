@@ -57,3 +57,46 @@ export interface SavedSummaryListItem {
 
   is_pinned: boolean;
 }
+
+export type RoadmapDiagramType = "flowchart" | "gantt" | "timeline";
+
+export interface RoadmapDiagram {
+  type: RoadmapDiagramType;
+  code: string;
+}
+
+export interface RoadmapMilestone {
+  title: string;
+  description: string;
+}
+
+export interface Roadmap {
+  id: string;
+  title: string;
+  description: string;
+  markdown: string;
+
+  diagram_type: RoadmapDiagramType;
+  diagram_code: string;
+
+  milestones: RoadmapMilestone[];
+
+  created_by: string;
+  created_at: string;
+
+  share_code: string;
+
+  is_saved: boolean;
+  is_pinned: boolean;
+}
+
+export interface SavedRoadmapListItem {
+  id: string;
+  title: string;
+  diagram_type: RoadmapDiagramType;
+  created_by: string;
+  created_at: string;
+  share_code: string;
+  is_pinned: boolean;
+}
+

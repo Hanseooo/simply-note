@@ -1,10 +1,15 @@
+import SavedRoadmapCard from "@/components/cards/savedRoadmapCard";
 import SavedSummaryCard from "@/components/cards/SavedSummaryCard";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 import LoadingScreen from "@/components/layout/Loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFetchRoadmapByCode } from "@/hooks/useFetchRoadmapByCode";
+import { useFetchSummaryByCode } from "@/hooks/useFetchSummaryByCode";
 import { usePinnedCollection } from "@/hooks/usePinnedCollection";
-import { useSummary } from "@/hooks/useSummary";
+// import { useSummary } from "@/hooks/useSummary";
 import { AnimatePresence } from "framer-motion";
+import { Map, Notebook } from "lucide-react";
 import { useState } from "react";
 
 type PinnedOptions = "Notes" | "Quizzes" | "Roadmaps";
@@ -12,19 +17,7 @@ type PinnedOptions = "Notes" | "Quizzes" | "Roadmaps";
 export default function PinnedCollection() {
   const [selectedTab, setSelectedTab] = useState<PinnedOptions>("Notes");
   const {data, isLoading} = usePinnedCollection(selectedTab)
-  const { pinSummary, unpinSummary, unsaveSummary } = useSummary()
-
-  function handleToggleNotePin(id: string) {
-    if (!data) return;
-    const note = data.find((n) => n.id === id);
-    if (!note) return;
-
-    if (note.is_pinned) {
-      unpinSummary(id);
-    } else {
-      pinSummary(id);
-    }
-  }
+//   const { unsaveSummary } = useSummary()
 
   const pinnedData = data?.filter((item) => item.is_pinned) ?? [];
 
@@ -52,11 +45,11 @@ export default function PinnedCollection() {
       <div className="relative mx-auto max-w-7xl px-4 py-8">
         {/* Loading overlay */}
         {isLoading && (
-          <LoadingScreen
-            overlay
-            title="Retrieving pinned collection"
-            description="Fetching your pinned items..."
-          />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-56 w-full rounded-lg" />
+            ))}
+          </div>
         )}
 
         {/* Content */}
@@ -67,15 +60,43 @@ export default function PinnedCollection() {
             <AnimatePresence>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {/* Add-by-share card */}
-                <ShareCodeButtonCard />
+                <ShareCodeButtonCard
+                  useFetchHook={useFetchSummaryByCode}
+                  title="View Shared Note"
+                  description="Enter a share code to view a note"
+                  dialogTitle="View note via share code"
+                  submitLabel="View Note"
+                  icon={Notebook}
+                />
 
                 {pinnedData.map((item) => (
                   <SavedSummaryCard
                     key={item.id}
                     item={item}
-                    onTogglePin={handleToggleNotePin}
-                    onDelete={unsaveSummary}
+                    // onDelete={}
                   />
+                ))}
+              </div>
+            </AnimatePresence>
+          )}
+        {!isLoading &&
+          data &&
+          pinnedData.length > 0 &&
+          selectedTab == "Roadmaps" && (
+            <AnimatePresence>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {/* Add-by-share card */}
+                <ShareCodeButtonCard
+                  useFetchHook={useFetchRoadmapByCode}
+                  title="View Shared Roadmap"
+                  description="Enter a share code to view a roadmap"
+                  dialogTitle="View roadmap via share code"
+                  submitLabel="View Roadmap"
+                  icon={Map}
+                />
+
+                {pinnedData.map((item) => (
+                  <SavedRoadmapCard key={item.id} item={item} />
                 ))}
               </div>
             </AnimatePresence>

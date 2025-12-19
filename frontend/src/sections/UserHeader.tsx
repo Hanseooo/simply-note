@@ -10,12 +10,43 @@ function getTimeGreeting() {
 }
 
 const greetings = [
+  // Gentle motivation
   "Let’s continue your study session and make some progress today.",
   "Ready to focus and move one step closer to your goals?",
-  "A great time to review and strengthen what you’ve learned.",
-  "Let’s pick up where you left off and keep the momentum going.",
   "Small steps today lead to big results over time.",
+  "Progress does not have to be perfect. Just stay consistent.",
+  "A focused session can make a real difference.",
+
+  // Focus and productivity
+  "Let’s clear distractions and focus on what matters right now.",
+  "One concept at a time. Stay focused and keep going.",
+  "This is a good moment to dive back into learning.",
+  "Let’s make the most of this study session.",
+  "Your future self will appreciate the effort you put in today.",
+
+  // Encouragement
+  "You are building knowledge one step at a time.",
+  "Every study session adds up over time.",
+  "Even a short study session counts as progress.",
+  "You have already started, and that matters.",
+  "Learning is a process. Be patient with yourself.",
+
+  // Reflection and continuity
+  "Let’s pick up where you left off and keep the momentum going.",
+  "This is a great time to review and strengthen what you have learned.",
+  "Revisiting concepts helps reinforce understanding.",
+  "Now is a good moment to connect what you have learned so far.",
+  "Let’s reinforce the progress you have already made.",
+
+  // Calm and supportive
+  "Take a breath and focus on learning at your own pace.",
+  "Studying does not need to feel rushed.",
+  "It is okay to take things one step at a time.",
+  "Focus on understanding instead of just finishing.",
+  "You are exactly where you need to be right now.",
 ];
+
+
 
 export default function UserHeader() {
   const user = useAuthStore((s) => s.user);
