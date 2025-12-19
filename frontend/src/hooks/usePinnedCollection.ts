@@ -10,8 +10,8 @@ const getPinnedRoadmaps = () => getMySavedRoadmapsApi({pinnedOnly : true})
 
 const fetchers: Record<PinnedType, () => Promise<any[]>> = {
   Notes: getPinnedNotes,
-  Quizzes: getMySavedSummariesApi, // can be stubbed
-  Roadmaps: getPinnedRoadmaps, // can be stubbed
+  Quizzes: getMySavedSummariesApi, // no api for now
+  Roadmaps: getPinnedRoadmaps, 
 };
 
 export const usePinnedCollection = (type: PinnedType) => {
@@ -19,5 +19,6 @@ export const usePinnedCollection = (type: PinnedType) => {
     queryKey: ["pinned", type],
     queryFn: fetchers[type],
     enabled: !!fetchers[type],
+    staleTime: 1000 * 60 * 2,
   });
 };

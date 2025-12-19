@@ -18,9 +18,9 @@ import { Separator } from "@/components/ui/separator";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 import SavedRoadmapCard from "@/components/cards/savedRoadmapCard";
 
-const PAGE_SIZE_MOBILE = 3;
-const PAGE_SIZE_TABLET = 6;
-const PAGE_SIZE_DESKTOP = 9;
+const PAGE_SIZE_MOBILE = 2;
+const PAGE_SIZE_TABLET = 5;
+const PAGE_SIZE_DESKTOP = 8;
 
 type SortOption = "recent";
 

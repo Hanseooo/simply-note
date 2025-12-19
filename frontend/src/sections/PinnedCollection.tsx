@@ -2,6 +2,7 @@ import SavedRoadmapCard from "@/components/cards/savedRoadmapCard";
 import SavedSummaryCard from "@/components/cards/SavedSummaryCard";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 import LoadingScreen from "@/components/layout/Loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFetchRoadmapByCode } from "@/hooks/useFetchRoadmapByCode";
 import { useFetchSummaryByCode } from "@/hooks/useFetchSummaryByCode";
@@ -44,11 +45,11 @@ export default function PinnedCollection() {
       <div className="relative mx-auto max-w-7xl px-4 py-8">
         {/* Loading overlay */}
         {isLoading && (
-          <LoadingScreen
-            overlay
-            title="Retrieving pinned collection"
-            description="Fetching your pinned items..."
-          />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-56 w-full rounded-lg" />
+            ))}
+          </div>
         )}
 
         {/* Content */}

@@ -17,9 +17,9 @@ import { BookOpen, Notebook } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 
-const PAGE_SIZE_MOBILE = 3;
-const PAGE_SIZE_TABLET = 6;
-const PAGE_SIZE_DESKTOP = 9;
+const PAGE_SIZE_MOBILE = 2;
+const PAGE_SIZE_TABLET = 5;
+const PAGE_SIZE_DESKTOP = 8;
 
 type SortOption = "recent" | "difficulty";
 

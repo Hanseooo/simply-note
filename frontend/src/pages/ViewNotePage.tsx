@@ -72,11 +72,11 @@ export default function ViewNotePage({
             </>
           )}
 
-          <CardFooter className="flex justify-between gap-2">
+          <CardFooter className="flex justify-between gap-2 text-primary">
             <Button
               variant="ghost"
               onClick={() => navigate({ to: "/notes" })}
-              className="gap-2"
+              className="gap-2 font-bold"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
