@@ -7,7 +7,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from .models import Summary, SavedSummary
-from .serializers import SummaryCreateSerializer, SummaryDetailSerializer, SavedSummaryListSerializer
+from .serializers import SummaryCreateSerializer, SummaryDetailSerializer, SavedSummaryListSerializer, SavedSummaryMinimalSerializer
 
 
 class SaveSummaryAPIView(APIView):
@@ -131,4 +131,19 @@ class UserSavedSummariesAPIView(APIView):
             queryset = queryset.filter(is_pinned=True)
 
         serializer = SavedSummaryListSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class UserSavedSummariesMinimalAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        queryset = (
+            SavedSummary.objects
+            .select_related("summary", "summary__created_by")
+            .filter(user=request.user)
+            .order_by("saved_at")
+        )
+
+        serializer = SavedSummaryMinimalSerializer(queryset, many=True)
         return Response(serializer.data)

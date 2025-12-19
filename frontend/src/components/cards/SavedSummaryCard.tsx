@@ -74,6 +74,7 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
       layout
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="h-full"
     >
       <Card className="relative flex flex-col justify-between border-primary/20 bg-linear-to-tr from-background/75 to-background shadow-sm transition-all hover:shadow-lg">
         {/* Pin */}

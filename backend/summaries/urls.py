@@ -6,7 +6,8 @@ from .views import (
     SummaryByCodeAPIView,
     PinSummaryAPIView,
     UnpinSummaryAPIView,
-    UserSavedSummariesAPIView
+    UserSavedSummariesAPIView,
+    UserSavedSummariesMinimalAPIView
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
 
     path("search/by-code/<str:code>/", SummaryByCodeAPIView.as_view()),
     path("me/saved/", UserSavedSummariesAPIView.as_view()),
+    path("me/saved/minimal/", UserSavedSummariesMinimalAPIView.as_view()),
 ]

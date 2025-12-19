@@ -1,7 +1,6 @@
 import SavedRoadmapCard from "@/components/cards/savedRoadmapCard";
 import SavedSummaryCard from "@/components/cards/SavedSummaryCard";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
-import LoadingScreen from "@/components/layout/Loading";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFetchRoadmapByCode } from "@/hooks/useFetchRoadmapByCode";

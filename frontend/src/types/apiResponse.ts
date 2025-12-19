@@ -1,13 +1,13 @@
 export type RegisterResponse = {
-  key: string; 
+  key: string;
 };
 
 export type User = {
-    id: number;
-    username: string;
-    email: string;
-    is_email_verified: boolean;
-  };
+  id: number;
+  username: string;
+  email: string;
+  is_email_verified: boolean;
+};
 
 export type LoginResponse = {
   token: string;
@@ -17,7 +17,7 @@ export type LoginResponse = {
 export type VerifyEmailResponse = {
   access: string;
   refresh: string;
-  user: User
+  user: User;
 };
 
 export interface SummarizedNote {
@@ -100,3 +100,72 @@ export interface SavedRoadmapListItem {
   is_pinned: boolean;
 }
 
+export type SavedQuizListItem = {
+  id: string;
+  title: string;
+  difficulty: "easy" | "medium" | "hard";
+  created_by: string;
+  is_pinned: boolean;
+  linked_at: string;
+};
+
+export type SavedSummaryMinimal = {
+  id: string;
+  title: string;
+  created_by: string;
+};
+
+export type QuizDifficulty = "easy" | "medium" | "hard";
+
+export type QuizTopic = {
+  id: string;
+  label: string;
+};
+
+export type QuizQuestionType =
+  | "multiple_choice"
+  | "true_false"
+  | "identification"
+  | "fill_blank";
+
+export type QuizQuestion = {
+  id: string;
+  type: QuizQuestionType;
+  topic_id: string;
+  question: string; // markdown-allowed
+  choices: string[] | null; // markdown-allowed
+  answer: string | boolean;
+  explanation: string; // markdown-allowed
+};
+
+export type QuizContent = {
+  title: string;
+  difficulty: QuizDifficulty;
+  topics: QuizTopic[];
+  questions: QuizQuestion[];
+};
+
+export type QuizApiResponse = {
+  id: string;
+  title: string;
+  difficulty: "easy" | "medium" | "hard";
+  topics: {
+    id: string;
+    label: string;
+  }[];
+  questions: QuizQuestion[];
+};
+
+export type QuizContentResponse = {
+  id: string;
+  title: string;
+  difficulty: QuizDifficulty;
+  content: {
+    title: string;
+    difficulty: QuizDifficulty;
+    topics: QuizTopic[];
+    questions: QuizQuestion[];
+  };
+  topics: QuizTopic[];
+  created_at: string;
+};

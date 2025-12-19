@@ -7,4 +7,5 @@ urlpatterns = [
     path('ai/', include('ai.urls')),
     path('summaries/', include('summaries.urls')),
     path('roadmaps/', include('roadmaps.urls')),
+    path('quizzes/', include('quizzes.urls')),
 ]

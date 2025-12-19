@@ -1,5 +1,10 @@
 import { api } from "@/lib/api";
-import type { SavedSummaryListItem, SummarizedNote } from "@/types/apiResponse";
+import type {
+  SavedSummaryListItem,
+  SummarizedNote,
+  SavedSummaryMinimal,
+} from "@/types/apiResponse";
+
 
 export const saveNewSummaryApi = (note: SummarizedNote) => {
   return api.post("/api/summaries/save/", {
@@ -56,5 +61,14 @@ export const getMySavedSummariesApi = async (opts?: {
 
   return data;
 };
+
+
+export const getMySavedSummariesMinimalApi = async () => {
+  const { data } = await api.get<SavedSummaryMinimal[]>(
+    "/api/summaries/me/saved/minimal/"
+  );
+  return data;
+};
+
 
 
