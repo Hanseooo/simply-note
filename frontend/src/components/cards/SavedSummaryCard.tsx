@@ -183,7 +183,7 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
             </Dialog>
 
             {/* Delete */}
-            <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+            <Dialog  open={confirmDelete} onOpenChange={setConfirmDelete}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <DialogTrigger asChild>
@@ -195,9 +195,9 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
                 <TooltipContent>Delete note</TooltipContent>
               </Tooltip>
 
-              <DialogContent>
+              <DialogContent className="border border-primary bg-linear-to-tr from-background to-primary/5">
                 <DialogHeader>
-                  <DialogTitle>Delete this note?</DialogTitle>
+                  <DialogTitle className="text-primary">Delete this note?</DialogTitle>
                 </DialogHeader>
 
                 <p className="text-sm text-muted-foreground">
@@ -206,7 +206,7 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
 
                 <div className="mt-4 flex justify-end gap-2">
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     onClick={() => setConfirmDelete(false)}
                   >
                     Cancel

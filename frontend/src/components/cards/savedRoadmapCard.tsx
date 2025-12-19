@@ -181,8 +181,8 @@ export default function SavedRoadmapCard({ item }: Props) {
                 <TooltipContent>Remove roadmap</TooltipContent>
               </Tooltip>
 
-              <DialogContent>
-                <DialogHeader>
+              <DialogContent className="border border-primary bg-linear-to-tr from-background to-primary/5">
+                <DialogHeader className="text-primary">
                   <DialogTitle>Remove Roadmap?</DialogTitle>
                 </DialogHeader>
 
