@@ -86,3 +86,18 @@ class SavedSummaryListSerializer(serializers.ModelSerializer):
         return {
             "username": obj.summary.created_by.username
         }
+    
+class SavedSummaryMinimalSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(source="summary.id")
+    title = serializers.CharField(source="summary.title")
+    created_by = serializers.CharField(
+        source="summary.created_by.username"
+    )
+
+    class Meta:
+        model = SavedSummary
+        fields = [
+            "id",
+            "title",
+            "created_by",
+        ]

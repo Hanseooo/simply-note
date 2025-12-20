@@ -20,6 +20,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   clearAuth: () => {
     localStorage.clear();
+    sessionStorage.removeItem("welcomeDialogSeen");
     set({ user: null, isAuthenticated: false });
   },
 }));

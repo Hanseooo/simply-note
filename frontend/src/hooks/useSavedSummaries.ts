@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMySavedSummariesApi } from "@/services/summaryApi";
-import type { SavedSummaryListItem } from "@/types/apiResponse";
+import { getMySavedSummariesApi, getMySavedSummariesMinimalApi } from "@/services/summaryApi";
+import type { SavedSummaryListItem, SavedSummaryMinimal } from "@/types/apiResponse";
 
 type UseSavedSummariesOptions = {
   pinnedOnly?: boolean;
@@ -38,7 +38,17 @@ export const useSavedSummaries = (opts?: UseSavedSummariesOptions) => {
   };
 };
 
-// const { savedSummaries, isLoading, refetchSavedSummaries } = useSavedSummaries({
-//   pinnedOnly: false,
-// });
+export const useSavedSummariesMinimal = () => {
+  const query = useQuery<SavedSummaryMinimal[]>({
+    queryKey: ["saved-summaries-minimal"],
+    queryFn: getMySavedSummariesMinimalApi,
+  });
+
+  return {
+    summaries: query.data ?? [],
+    isLoading: query.isLoading,
+    isFetching: query.isFetching,
+    isError: query.isError,
+  };
+}
 

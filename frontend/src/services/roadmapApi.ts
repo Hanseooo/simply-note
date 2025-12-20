@@ -22,7 +22,6 @@ export const unpinRoadmapApi = async (roadmapId: string) => {
   return data;
 };
 
-// services/roadmapApi.ts
 export const getRoadmapByCodeApi = async (code: string) => {
   const { data } = await api.get<{ id: string }>(
     `/api/roadmaps/share/${code}/`

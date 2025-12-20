@@ -11,9 +11,10 @@ def generate_json_content(
     system_prompt: str,
     user_prompt: str,
     thinking_budget: int = -1,
+    model: str = "gemini-2.5-flash-lite",
 ):
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=model,
         contents=user_prompt,
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
