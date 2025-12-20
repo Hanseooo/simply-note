@@ -31,7 +31,7 @@ export default function WelcomeDialog() {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="max-w-lg w-full p-6 rounded-2xl bg-linear-20 backdrop-blur-lg from-background via-background/50 to-primary/25 border border-primary shadow-lg"
+            className="max-w-lg w-full p-6 rounded-2xl bg-linear-20 backdrop-blur-lg from-background/75 via-muted/60 to-background/40 border border-primary shadow-lg"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
