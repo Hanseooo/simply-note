@@ -13,6 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import type { RoadmapDiagramType } from "@/types/apiResponse";
 import { useGenerateRoadmap } from "@/hooks/useGenerateRoadmap";
 import LoadingScreen from "@/components/layout/Loading";
+import { getGeneralAIQuota, useAIQuota } from "@/hooks/useAiQuota";
+import { AIQuotaProgress } from "@/components/progress/AIQuotaProgress";
 
 const MIN_CHARS = 3;
 const MAX_CHARS = 42;
@@ -51,6 +53,14 @@ export default function RoadmapGenerator() {
   const [title, setTitle] = useState("");
   const [diagramType, setDiagramType] = useState<RoadmapDiagramType>("flowchart");
 
+  const {data: roadmapQuota} = useAIQuota()
+
+  const generateRoadmapQuota = getGeneralAIQuota(roadmapQuota)
+
+  const ROADMAP_COST = 1
+
+  const canGenerate = !!generateRoadmapQuota && generateRoadmapQuota.remaining_credits >= ROADMAP_COST
+
   const { generateRoadmap,isGenerating } = useGenerateRoadmap()
 
   const charCount = title.length;
@@ -65,9 +75,22 @@ export default function RoadmapGenerator() {
 
   return (
     <section className="relative w-full max-w-3xl mx-auto mt-10 px-4 mb-16">
-        {isGenerating && (
-            <LoadingScreen overlay title="Generating your Roadmap" description="This may take a few seconds" />
-        )}
+      {isGenerating && (
+        <LoadingScreen
+          overlay
+          title="Generating your Roadmap"
+          description="This may take a few seconds"
+        />
+      )}
+      {generateRoadmapQuota && (
+        <AIQuotaProgress
+          label="Remaining Credits"
+          max={generateRoadmapQuota.max_credits}
+          remaining={generateRoadmapQuota.remaining_credits}
+          disabled={!canGenerate}
+          className="mb-6 mx-auto"
+        />
+      )}
       <div className="rounded-xl border bg-linear-to-tr from-background/25 via-card/25 to-primary/5 p-6 shadow-sm space-y-6">
         {/* Header */}
         <div className="space-y-1">
@@ -96,7 +119,7 @@ export default function RoadmapGenerator() {
 
           <Input
             id="roadmap-title"
-            placeholder= {`${topicPlaceholder}`}
+            placeholder={`${topicPlaceholder}`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -132,15 +155,16 @@ export default function RoadmapGenerator() {
         {/* Action */}
         <div className="flex justify-end">
           <Button
-            disabled={isInvalid || isGenerating}
+            disabled={isInvalid || isGenerating || !canGenerate}
             className="min-w-40"
-            onClick={() => 
+            onClick={() =>
               generateRoadmap({
-                topic: title, diagram_type: diagramType
+                topic: title,
+                diagram_type: diagramType,
               })
             }
           >
-            Generate Roadmap
+            {canGenerate ? "Generate Roadmap" : "Insufficient Credits"}
           </Button>
         </div>
       </div>

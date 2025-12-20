@@ -180,13 +180,13 @@ export function HeroGeometric({
             animate="visible"
           >
             <h1 className="text-4xl playfair-display sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
-              <span className="bg-clip-text playfair-display text-5xl sm:text-7xl text-transparent bg-gradient-to-tl from-white via-neutral-300/80 to-white">
+              <span className="bg-clip-text playfair-display text-5xl sm:text-7xl text-transparent bg-gradient-to-tl from-foreground via-foreground/75 to-foreground">
                 {title1}
               </span>
               <br />
               <span
                 className={cn(
-                  "bg-clip-text text-transparent playfair-display bg-gradient-to-r from-purple-500 via-white/90 to-purple-700"
+                  "bg-clip-text text-transparent playfair-display bg-gradient-to-r from-purple-600 to-purple-700"
                 )}
               >
                 {title2}

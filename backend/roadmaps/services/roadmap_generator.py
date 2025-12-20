@@ -3,6 +3,7 @@ from ai.services.gemini_client import generate_json_content
 from .roadmap_prompts import SYSTEM_PROMPT, build_user_prompt
 
 
+
 EXPECTED_HEADERS = {
     "flowchart": "flowchart td",
     "gantt": "gantt",

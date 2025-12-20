@@ -18,6 +18,12 @@ from .services.quiz_validator import QuizContentSerializer
 from django.utils.timezone import now
 from datetime import timedelta
 
+
+from ai.services.quota import AIQuotaService
+from ai.constants import AICreditCost
+from ai.models import AIQuotaBucket
+from ai.throttles import AIGenerationBurstThrottle
+
 def cleanup_orphan_quizzes():
     threshold = now() - timedelta(minutes=15)
 
@@ -33,8 +39,14 @@ def cleanup_orphan_quizzes():
 
 class GenerateQuizView(APIView):
     permission_classes = [IsAuthenticated]
-
+    throttle_classes = [AIGenerationBurstThrottle]
     def post(self, request):
+        AIQuotaService.consume(
+            user=request.user,
+            bucket=AIQuotaBucket.BUCKET_QUIZ,
+            cost=AICreditCost.QUIZ_GENERATION,
+        )
+
         serializer = GenerateQuizSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

@@ -47,6 +47,7 @@ export type QuizOptions = {
 
 type Props = {
   summary: SavedSummaryMinimal;
+  canGenerate: boolean;
 };
 
 const QUESTION_TYPES: {
@@ -59,7 +60,7 @@ const QUESTION_TYPES: {
   { label: "Fill in the Blank", value: "fill_blank" },
 ];
 
-export function GenerateQuizCard({ summary }: Props) {
+export function GenerateQuizCard({ summary, canGenerate }: Props) {
   const { mutate, isPending } = useGenerateQuiz();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -68,6 +69,7 @@ export function GenerateQuizCard({ summary }: Props) {
     difficulty: "medium",
     short_quiz: false,
   });
+
 
   const [error, setError] = useState<string | null>(null);
 
@@ -257,10 +259,14 @@ export function GenerateQuizCard({ summary }: Props) {
               <DialogFooter>
                 <Button
                   onClick={handleGenerate}
-                  disabled={!isValid || isPending}
+                  disabled={!isValid || isPending || !canGenerate}
                   className="w-full"
                 >
-                  {isPending ? "Generating Quiz..." : "Generate Quiz"}
+                  {isPending
+                    ? "Generating Quiz..."
+                    : canGenerate
+                      ? "Generate Quiz"
+                      : "Insufficient Credits"}
                 </Button>
               </DialogFooter>
             </DialogContent>

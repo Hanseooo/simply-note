@@ -45,6 +45,8 @@ const SEARCH_DEBOUNCE_MS = 300;
 
 /* ---------- debounce hook (local & simple) ---------- */
 import { useEffect } from "react";
+import { getQuizAIQuota, useAIQuota } from "@/hooks/useAiQuota";
+import { AIQuotaProgress } from "@/components/progress/AIQuotaProgress";
 
 function useDebouncedValue<T>(value: T, delay: number) {
   const [debounced, setDebounced] = useState(value);
@@ -63,6 +65,13 @@ function useDebouncedValue<T>(value: T, delay: number) {
 export default function GenerateQuiz() {
   const { summaries, isLoading } = useSavedSummariesMinimal();
   const PAGE_SIZE = useResponsivePageSize();
+
+  const {data: quotaData} = useAIQuota()
+  const quizQuota = getQuizAIQuota(quotaData)
+
+  const QUIZ_COST = 2
+
+  const canGenerateQuiz = !!quizQuota && quizQuota.remaining_credits >= QUIZ_COST
 
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -128,7 +137,7 @@ const filtered = useMemo(() => {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6 px-4 mt-4 mb-8 sm:px-8 mx-auto max-w-7xl"
+      className="space-y-6 min-h-[64vh] px-4 mt-4 mb-8 sm:px-8 mx-auto max-w-7xl"
     >
       {/* Header */}
       <div className="space-y-2">
@@ -138,15 +147,30 @@ const filtered = useMemo(() => {
         </p>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          value={search}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          placeholder="Search summaries..."
-          className="pl-9"
-        />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        {/* Search */}
+        <div className="relative max-w-md w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search summaries..."
+            className="pl-9"
+          />
+        </div>
+
+        {/* Quota */}
+        {quizQuota && (
+          <div className="mb-6">
+            <AIQuotaProgress
+              label="Remaining Quiz Credits"
+              remaining={quizQuota.remaining_credits}
+              max={quizQuota.max_credits}
+              secondsUntilReset={quizQuota.seconds_until_reset}
+              disabled={!canGenerateQuiz}
+            />
+          </div>
+        )}
       </div>
 
       <Separator />
@@ -171,7 +195,10 @@ const filtered = useMemo(() => {
                 exit="exit"
                 layout
               >
-                <GenerateQuizCard summary={summary} />
+                <GenerateQuizCard
+                  canGenerate={canGenerateQuiz}
+                  summary={summary}
+                />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -180,13 +207,15 @@ const filtered = useMemo(() => {
 
       {/* Empty State */}
       {!isLoading && filtered.length === 0 && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-sm text-muted-foreground"
-        >
-          No summaries found.
-        </motion.p>
+        <div className="min-h-[24vh] flex items-center justify-center">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-sm text-muted-foreground max-w-full text-center"
+          >
+            No summaries found.
+          </motion.p>
+        </div>
       )}
 
       {/* Pagination */}

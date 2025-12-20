@@ -4,15 +4,21 @@ import { toast } from "sonner";
 import { generateRoadmapApi } from "@/services/aiApi";
 import type { Roadmap } from "@/types/apiResponse";
 import axios from "axios";
+import { AI_QUOTA_QUERY_KEY } from "./useAiQuota";
 
 export const useGenerateRoadmap = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const qc = useQueryClient()
+
   const mutation = useMutation({
     mutationFn: generateRoadmapApi,
 
     onSuccess: (data: Roadmap) => {
+
+      qc.invalidateQueries({queryKey : AI_QUOTA_QUERY_KEY})
+
       toast.success(`Roadmap Generated: ${data.title}`);
 
       queryClient.setQueryData(["roadmap", data.id], data);

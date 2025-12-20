@@ -7,20 +7,29 @@ from .services.gemini_client import generate_json_content
 from .prompts.summarize_notes import SYSTEM_PROMPT
 from .serializers import SummarySerializer
 from rest_framework.permissions import IsAuthenticated
-from ai.throttles import AISummarizeBurstThrottle
+from ai.throttles import AIGenerationBurstThrottle
 from ai.services.quota import AIQuotaService
 from google.genai.errors import ServerError
+from datetime import timedelta
+from django.utils import timezone
+
+
+from ai.services.quota import AIQuotaService
+from ai.constants import AICreditCost
+from ai.models import AIQuotaBucket
+
 
 
 class SummarizeNotesAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    throttle_classes = [AISummarizeBurstThrottle]
+    throttle_classes = [AIGenerationBurstThrottle]
     def post(self, request):
+        AIQuotaService.consume(
+             user=request.user,
+            bucket=AIQuotaBucket.BUCKET_GENERAL,
+            cost=AICreditCost.SUMMARIZE_FLASH_LITE,
+        )
         original_text = request.data.get("text")
-        # AIQuotaService.check_and_consume(
-        #     user=request.user,
-        #     action="summarize",
-        # )
 
         if not original_text:
             return Response(
@@ -69,3 +78,30 @@ class SummarizeNotesAPIView(APIView):
             )
 
         return Response(serializer.validated_data)
+
+class AIQuotaStatusAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        AIQuotaService.ensure_all_buckets(request.user)
+
+        data = []
+        now = timezone.now()
+
+        for quota in AIQuotaBucket.objects.filter(user=request.user):
+            window_end = quota.window_started_at + timedelta(hours=quota.window_hours)
+
+            data.append({
+                "bucket": quota.bucket,
+                "used_credits": quota.used_credits,
+                "max_credits": quota.max_credits,
+                "remaining_credits": max(
+                    quota.max_credits - quota.used_credits, 0
+                ),
+                "window_ends_at": window_end,
+                "seconds_until_reset": max(
+                    int((window_end - now).total_seconds()), 0
+                ),
+            })
+
+        return Response(data)

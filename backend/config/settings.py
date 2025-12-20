@@ -227,8 +227,11 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     "DEFAULT_THROTTLE_RATES": {
-        "ai_summarize_burst": "5/min",
+        "ai_generation_burst": "4/min",
     },
+
+    "EXCEPTION_HANDLER": "api.exception_handler.custom_exception_handler",
+
 }
 
 # Swagger UI Settings

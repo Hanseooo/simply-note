@@ -3,15 +3,20 @@ import { useNavigate } from "@tanstack/react-router";
 import { summarizeApi } from "@/services/aiApi";
 import { toast } from "sonner";
 import axios from "axios";
+import { AI_QUOTA_QUERY_KEY } from "./useAiQuota";
 
 export const useSummarize = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const qc = useQueryClient()
+
   return useMutation({
     mutationFn: summarizeApi,
     onSuccess: (data) => {
       // Cache it
+     qc.invalidateQueries({queryKey : AI_QUOTA_QUERY_KEY})
+
       queryClient.setQueryData(["latest-summary"], data);
       toast.success(`Summarized ${data.title}`);
 

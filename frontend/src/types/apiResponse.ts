@@ -111,7 +111,6 @@ export type SavedQuizListItem = {
   topics: QuizTopic[];
 };
 
-
 export type SavedSummaryMinimal = {
   id: string;
   title: string;
@@ -135,10 +134,10 @@ export type QuizQuestion = {
   id: string;
   type: QuizQuestionType;
   topic_id: string;
-  question: string; // markdown-allowed
-  choices: string[] | null; // markdown-allowed
+  question: string; 
+  choices: string[] | null; 
   answer: string | boolean;
-  explanation: string; // markdown-allowed
+  explanation: string; 
 };
 
 export type QuizContent = {
@@ -172,3 +171,18 @@ export type QuizContentResponse = {
   topics: QuizTopic[];
   created_at: string;
 };
+
+export type AIQuotaBucketType = "general" | "quiz";
+
+export type AIQuotaStatusItem = {
+  bucket: AIQuotaBucketType;
+
+  used_credits: number;
+  max_credits: number;
+  remaining_credits: number;
+
+  window_ends_at: string; 
+  seconds_until_reset: number;
+};
+
+export type AIQuotaStatusResponse = AIQuotaStatusItem[];
