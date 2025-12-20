@@ -1,6 +1,8 @@
+import { useQuizStore } from "@/store/quizStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 function getTimeGreeting() {
   const hour = new Date().getHours();
@@ -50,6 +52,36 @@ const greetings = [
 
 export default function UserHeader() {
   const user = useAuthStore((s) => s.user);
+  const [isDark, setIsDark] = useState(true);
+
+    const resetQuiz = useQuizStore().resetQuiz;
+
+    useEffect(() => {
+      resetQuiz();
+    }, []);
+
+    useEffect(() => {
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme === "light") {
+        setIsDark(false);
+        document.documentElement.classList.remove("dark");
+      } else {
+        setIsDark(true);
+        document.documentElement.classList.add("dark");
+      }
+    }, []);
+
+      const toggleTheme = () => {
+        const newMode = !isDark;
+        setIsDark(newMode);
+        if (newMode) {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        }
+      };
 
   // Random greeting, stable per render
   const greetingMessage = useMemo(() => {
@@ -62,7 +94,7 @@ export default function UserHeader() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="w-full border-b py-10 px-4 bg-linear-to-tr from-background to-primary/5"
+      className="w-full relative border-b py-10 px-4 bg-linear-to-tr from-background to-primary/5"
     >
       <div className="mx-auto max-w-7xl text-center">
         <p className="text-lg font-medium text-muted-foreground">
@@ -77,6 +109,18 @@ export default function UserHeader() {
           {greetingMessage}
         </p>
       </div>
+
+      <button
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 md:right-12 text-primary p-2 sm:p-3 rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors flex items-center justify-center"
+        aria-label="Toggle theme"
+      >
+        {isDark ? (
+          <Sun className="w-5 h-5 sm:w-6 sm:h-6" />
+        ) : (
+          <Moon className="w-5 h-5 sm:w-6 sm:h-6" />
+        )}
+      </button>
 
       {/* Bold accent divider */}
       <div className="mt-6 h-1 w-2/3 mx-auto rounded-full bg-linear-to-r from-transparent via-primary/60 to-transparent" />

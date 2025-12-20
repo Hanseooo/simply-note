@@ -23,6 +23,7 @@ import { Search, X, BookOpen, SquarePen } from "lucide-react";
 import { useDebounce } from "@/hooks/useDebounce";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 import { useFetchQuizByCode } from "@/hooks/useFetchQuizByCode";
+import { useQuizStore } from "@/store/quizStore";
 
 /* --------------------------------
    Pagination sizes
@@ -46,6 +47,8 @@ export default function SavedQuizzes() {
 
   const debouncedSearch = useDebounce(searchQuery, 300);
 
+  const resetQuiz = useQuizStore().resetQuiz
+
   /* -------------------------------
      Responsive page size
   -------------------------------- */
@@ -56,7 +59,7 @@ export default function SavedQuizzes() {
       else if (width < 1024) setPageSize(PAGE_SIZE_TABLET);
       else setPageSize(PAGE_SIZE_DESKTOP);
     }
-
+    resetQuiz()
     updatePageSize();
     window.addEventListener("resize", updatePageSize);
     return () => window.removeEventListener("resize", updatePageSize);
