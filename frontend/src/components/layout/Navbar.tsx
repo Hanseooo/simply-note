@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Settings, LogOut, User, Menu, X } from "lucide-react";
+import { LogOut, User, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLogout } from "@/hooks/useLogout";
 import { useNavigate } from "@tanstack/react-router";
@@ -103,11 +103,11 @@ export default function Navbar() {
                 </div>
               </DropdownMenuLabel>
 
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator /> */}
 
-              <DropdownMenuItem className="cursor-pointer">
+              {/* <DropdownMenuItem className="cursor-pointer">
                 <Settings className="mr-2 h-4 w-4" /> Settings
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
 
               <DropdownMenuSeparator />
 
@@ -142,12 +142,12 @@ export default function Navbar() {
 
             {/* Mobile Settings & Logout buttons */}
             <div className="flex flex-col gap-2 pt-2 border-t border-primary">
-              <Button
+              {/* <Button
                 variant="ghost"
                 className="w-full justify-end text-muted-foreground"
               >
                 <Settings className="mr-2 h-4 w-4" /> Settings
-              </Button>
+              </Button> */}
               <Button
                 variant="ghost"
                 className="w-full justify-end text-destructive"
