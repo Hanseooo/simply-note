@@ -7,6 +7,8 @@ import { Upload } from "lucide-react";
 import { extractPdfText } from "@/lib/extractPdfText";
 import { useSummarize } from "@/hooks/useSummarize";
 import LoadingScreen from "@/components/layout/Loading";
+import { getGeneralAIQuota, useAIQuota } from "@/hooks/useAiQuota";
+import { AIQuotaProgress } from "@/components/progress/AIQuotaProgress";
 
 const MIN_CHARS = 512;
 const MAX_CHARS = 7680;
@@ -18,6 +20,13 @@ export default function NoteSummarizer() {
   const [pdfText, setPdfText] = useState("");
   const [loading, setLoading] = useState(false);
   const [textInput, setTextInput] = useState("")
+
+  const {data: quotaData} = useAIQuota()
+
+  const summarizeQuota = getGeneralAIQuota(quotaData)
+
+  const SUMMARIZE_COST = 1
+  const canGenerate = !!summarizeQuota && summarizeQuota.remaining_credits >= SUMMARIZE_COST
 
   const summarize = useSummarize();
 
@@ -57,10 +66,22 @@ export default function NoteSummarizer() {
       )}
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-        <TabsList className="mx-auto mb-6">
-          <TabsTrigger value="text">Text</TabsTrigger>
-          <TabsTrigger value="pdf">PDF</TabsTrigger>
-        </TabsList>
+        <div className="flex justify-between">
+            {
+                summarizeQuota && (
+                    <AIQuotaProgress
+                    max={summarizeQuota.max_credits}
+                    label="Remaining Credits"
+                    remaining={summarizeQuota.remaining_credits}
+                    disabled={!canGenerate}
+                    />
+                )
+            }
+          <TabsList className="mb-6">
+            <TabsTrigger value="text">Text</TabsTrigger>
+            <TabsTrigger value="pdf">PDF</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* TEXT TAB */}
         <TabsContent value="text" className="space-y-4">
@@ -92,22 +113,25 @@ export default function NoteSummarizer() {
             <p className="text-xs text-muted-foreground">
               Text must be between{" "}
               <span className="font-medium text-primary">{MIN_CHARS}</span> and{" "}
-              <span className="font-medium text-primary">{MAX_CHARS}</span> characters.
+              <span className="font-medium text-primary">{MAX_CHARS}</span>{" "}
+              characters.
             </p>
           </div>
 
           <div className="flex justify-end">
             <Button
-              disabled={isInvalid || summarize.isPending}
+              disabled={isInvalid || summarize.isPending || !canGenerate}
               onClick={() =>
-                summarize.mutate(
-                  {
-                    text: textInput,
-                  },
-                )
+                summarize.mutate({
+                  text: textInput,
+                })
               }
             >
-              {summarize.isPending ? "Summarizing…" : "Summarize Text"}
+              {summarize.isPending
+                ? "Summarizing…"
+                : canGenerate
+                  ? "Summarize Text"
+                  : "Insufficient Credits"}
             </Button>
           </div>
         </TabsContent>
@@ -158,16 +182,20 @@ export default function NoteSummarizer() {
 
           <div className="flex justify-end">
             <Button
-              disabled={!pdfText || loading || summarize.isPending}
+              disabled={
+                !pdfText || loading || summarize.isPending || !canGenerate
+              }
               onClick={() =>
-                summarize.mutate(
-                  {
-                    text: pdfText,
-                  },
-                )
+                summarize.mutate({
+                  text: pdfText,
+                })
               }
             >
-              {summarize.isPending ? "Summarizing…" : "Summarize PDF"}
+              {summarize.isPending
+                ? "Summarizing…"
+                : canGenerate
+                  ? "Summarize PDF"
+                  : "Insufficient Credits"}
             </Button>
           </div>
         </TabsContent>

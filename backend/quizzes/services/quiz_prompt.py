@@ -80,7 +80,6 @@ MATH CONTENT RULES (CRITICAL):
 
 QUIZ LENGTH RULE:
 - If `short_quiz` is false, attempt to generate at least 8 questions.
-- Only generate fewer than 8 questions if the content does not support high-quality questions.
 - Do not pad or invent content just to reach more than 8 questions.
 - If `short_quiz` is true, generate as few as 5-7 questions.
 

@@ -10,10 +10,21 @@ from .services.roadmap_generator import generate_roadmap, RoadmapGenerationError
 from django.utils import timezone
 from datetime import timedelta
 
+from ai.services.quota import AIQuotaService
+from ai.constants import AICreditCost
+from ai.models import AIQuotaBucket
+from ai.throttles import AIGenerationBurstThrottle
+
 class GenerateRoadmapAPIView(APIView):
     permission_classes = [IsAuthenticated]
-
+    throttle_classes = [AIGenerationBurstThrottle]
     def post(self, request):
+        AIQuotaService.consume(
+            user=request.user,
+            bucket=AIQuotaBucket.BUCKET_GENERAL,
+            cost=AICreditCost.ROADMAP_FLASH_LITE,
+        )
+
         topic = request.data.get("topic")
         diagram_type = request.data.get("diagram_type")
 
