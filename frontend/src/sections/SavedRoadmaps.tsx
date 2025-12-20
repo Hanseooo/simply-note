@@ -35,9 +35,7 @@ export default function SavedRoadmaps() {
 
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  /* -------------------------------
-     Responsive page size
-  -------------------------------- */
+
   useEffect(() => {
     function updatePageSize() {
       const width = window.innerWidth;
@@ -51,9 +49,7 @@ export default function SavedRoadmaps() {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
-  /* -------------------------------
-     Filtering by search
-  -------------------------------- */
+
   const filteredRoadmaps = useMemo(() => {
     if (!debouncedSearch.trim()) return savedRoadmaps;
 
@@ -162,9 +158,17 @@ export default function SavedRoadmaps() {
         >
           <Map className="mb-3 h-10 w-10 text-muted-foreground" />
           <h3 className="text-lg font-semibold">No saved roadmaps yet</h3>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+          <p className="mt-1 mb-6 max-w-sm text-sm text-muted-foreground">
             Save a roadmap to keep track of your learning plans.
           </p>
+          <ShareCodeButtonCard
+            useFetchHook={useFetchRoadmapByCode}
+            title="View Shared Roadmap"
+            description="Enter a share code to view a roadmap"
+            dialogTitle="View roadmap via share code"
+            submitLabel="View Roadmap"
+            icon={Map}
+          />
         </motion.div>
       )}
 

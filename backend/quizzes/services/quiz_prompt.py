@@ -67,6 +67,33 @@ CONTENT BOUNDARY RULE:
 FAILURE HANDLING:
 - If you cannot comply, return an empty JSON object {}
 
+MATH CONTENT RULES (CRITICAL):
+- If a question involves formulas, equations, matrices, symbols, calculations, or numerical computation:
+  - The question type MUST be multiple_choice or true_false
+  - identification and fill_blank are STRICTLY FORBIDDEN
+- identification and fill_blank may ONLY be used for:
+  - plain text concepts
+  - names
+  - definitions
+  - labels
+- If this rule is violated, the output is INVALID
+
+QUIZ LENGTH RULE:
+- If `short_quiz` is false, attempt to generate at least 8 questions.
+- Only generate fewer than 8 questions if the content does not support high-quality questions.
+- Do not pad or invent content just to reach more than 8 questions.
+- If `short_quiz` is true, generate as few as 5-7 questions.
+
+
+ATOMIC ANSWER RULE:
+- identification and fill_blank answers MUST be atomic
+- Atomic means:
+  - no lists
+  - no structured data
+  - no multi-part answers
+- If the correct answer has more than one component, use multiple_choice instead
+
+
 
 QUESTION TYPE RULES:
 - multiple_choice: exactly 4 choices

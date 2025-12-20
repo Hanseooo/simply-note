@@ -1,8 +1,11 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
-import { useSavedSummaries } from "@/hooks/useSavedSummaries";
-import { useSummary } from "@/hooks/useSummary";
-import SavedSummaryCard from "@/components/cards/SavedSummaryCard";
-import { useFetchSummaryByCode } from "@/hooks/useFetchSummaryByCode";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { useSavedQuizzes } from "@/hooks/useSavedQuizzes";
+import SavedQuizCard from "@/components/cards/SavedQuizCard";
+
 import {
   Pagination,
   PaginationContent,
@@ -14,31 +17,31 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { BookOpen, Notebook, Search, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 import { Button } from "@/components/ui/button";
-import { useDebounce } from "@/hooks/useDebounce";
 
+import { Search, X, BookOpen, SquarePen } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
+import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
+import { useFetchQuizByCode } from "@/hooks/useFetchQuizByCode";
+
+/* --------------------------------
+   Pagination sizes
+-------------------------------- */
 const PAGE_SIZE_MOBILE = 2;
 const PAGE_SIZE_TABLET = 5;
 const PAGE_SIZE_DESKTOP = 8;
 
-type SortOption = "recent" | "difficulty";
-
 const difficultyRank = {
-  beginner: 1,
-  intermediate: 2,
-  advanced: 3,
+  easy: 1,
+  medium: 2,
+  hard: 3,
 };
 
-export default function SavedNotesSection() {
-  const { savedSummaries, isLoading } = useSavedSummaries();
-  const { unsaveSummary } = useSummary();
+export default function SavedQuizzes() {
+  const { quizzes, isLoading } = useSavedQuizzes();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_DESKTOP);
-  const [sort] = useState<SortOption>("recent");
   const [searchQuery, setSearchQuery] = useState("");
 
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -60,55 +63,45 @@ export default function SavedNotesSection() {
   }, []);
 
   /* -------------------------------
-     Filtering by search
+     Filtering
   -------------------------------- */
-  const filteredNotes = useMemo(() => {
-    if (!debouncedSearch.trim()) return savedSummaries;
+  const filteredQuizzes = useMemo(() => {
+    if (!debouncedSearch.trim()) return quizzes;
 
     const query = debouncedSearch.toLowerCase();
-    return savedSummaries.filter(
-      (note) =>
-        note.title.toLowerCase().includes(query) ||
-        note.created_by.username.toLowerCase().includes(query) ||
-        note.difficulty.toLowerCase().includes(query)
+    return quizzes.filter(
+      (quiz) =>
+        quiz.title.toLowerCase().includes(query) ||
+        quiz.created_by.toLowerCase().includes(query) ||
+        quiz.difficulty.toLowerCase().includes(query)
     );
-  }, [savedSummaries, debouncedSearch]);
+  }, [quizzes, debouncedSearch]);
 
   /* -------------------------------
-     Sorting logic (PIN FIRST)
+     Sorting (PIN FIRST)
   -------------------------------- */
-  const sortedNotes = useMemo(() => {
-    return [...filteredNotes]
+  const sortedQuizzes = useMemo(() => {
+    return [...filteredQuizzes]
       .sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned))
-      .sort((a, b) => {
-        if (sort === "recent") {
-          return (
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-        }
-
-        if (sort === "difficulty") {
-          return difficultyRank[b.difficulty] - difficultyRank[a.difficulty];
-        }
-
-        return 0;
-      });
-  }, [filteredNotes, sort]);
+      .sort(
+        (a, b) => difficultyRank[b.difficulty] - difficultyRank[a.difficulty]
+      );
+  }, [filteredQuizzes]);
 
   /* -------------------------------
      Pagination
   -------------------------------- */
-  const totalPages = Math.ceil(sortedNotes.length / pageSize);
+  const totalPages = Math.ceil(sortedQuizzes.length / pageSize);
 
-  const paginatedNotes = useMemo(() => {
+  const paginatedQuizzes = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
-    return sortedNotes.slice(start, start + pageSize);
-  }, [sortedNotes, currentPage, pageSize]);
+    return sortedQuizzes.slice(start, start + pageSize);
+  }, [sortedQuizzes, currentPage, pageSize]);
 
-  /* Reset page when layout or search changes */
+  /* Reset page on layout/search change */
   useEffect(() => {
     setCurrentPage(1);
-  }, [pageSize, sort, debouncedSearch]);
+  }, [pageSize, debouncedSearch]);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
@@ -116,23 +109,24 @@ export default function SavedNotesSection() {
       <div className="mb-6 space-y-4">
         <div className="space-y-2">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Saved Notes
+            Saved Quizzes
           </h2>
           <p className="text-sm text-muted-foreground">
-            Your summarized notes, organized and ready to review.
+            Your saved quizzes, organized and ready to take.
           </p>
         </div>
 
-        {/* Search Bar */}
-        {!isLoading && savedSummaries.length > 0 && (
+        {/* Search */}
+        {!isLoading && quizzes.length > 0 && (
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search notes by title, author, or difficulty..."
+              placeholder="Search quizzes by title, author, or difficulty..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 pr-10"
             />
+
             <AnimatePresence>
               {searchQuery && (
                 <motion.div
@@ -167,33 +161,33 @@ export default function SavedNotesSection() {
         </div>
       )}
 
-      {/* Empty State - No Notes */}
-      {!isLoading && savedSummaries.length === 0 && (
+      {/* Empty State */}
+      {!isLoading && quizzes.length === 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center justify-center rounded-lg border border-dashed py-20 text-center"
         >
           <BookOpen className="mb-3 h-10 w-10 text-muted-foreground" />
-          <h3 className="text-lg font-semibold">No saved notes yet</h3>
-          <p className="mt-1 mb-6 max-w-sm text-sm text-muted-foreground">
-            Summarize a note and save it to build your study library.
+          <h3 className="text-lg font-semibold">No saved quizzes yet</h3>
+          <p className="mt-1 max-w-sm mb-8 text-sm text-muted-foreground">
+            Save a quiz to keep track of what you want to practice next.
           </p>
           <ShareCodeButtonCard
-            useFetchHook={useFetchSummaryByCode}
-            title="View Shared Note"
-            description="Enter a share code to view a note"
-            dialogTitle="View note via share code"
-            submitLabel="View Note"
-            icon={Notebook}
+            submitLabel="Answer Quiz"
+            title="Answer Quiz Via Share code"
+            useFetchHook={useFetchQuizByCode}
+            description="Enter a share code to automatically add them to saved Quiz"
+            dialogTitle="Answer Quiz via Share code"
+            icon={SquarePen}
           />
         </motion.div>
       )}
 
-      {/* Empty State - No Search Results */}
+      {/* Empty Search */}
       {!isLoading &&
-        savedSummaries.length > 0 &&
-        sortedNotes.length === 0 &&
+        quizzes.length > 0 &&
+        sortedQuizzes.length === 0 &&
         debouncedSearch && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -201,10 +195,9 @@ export default function SavedNotesSection() {
             className="flex flex-col items-center justify-center rounded-lg border border-dashed py-20 text-center"
           >
             <Search className="mb-3 h-10 w-10 text-muted-foreground" />
-            <h3 className="text-lg font-semibold">No notes found</h3>
+            <h3 className="text-lg font-semibold">No quizzes found</h3>
             <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-              Try adjusting your search query or clear the search to see all
-              notes.
+              Try adjusting your search or clear it to see all quizzes.
             </p>
             <Button
               variant="outline"
@@ -216,23 +209,23 @@ export default function SavedNotesSection() {
           </motion.div>
         )}
 
-      {/* Notes grid */}
-      {!isLoading && paginatedNotes.length > 0 && (
+      {/* Grid */}
+      {!isLoading && paginatedQuizzes.length > 0 && (
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <ShareCodeButtonCard
-              useFetchHook={useFetchSummaryByCode}
-              title="View Shared Note"
-              description="Enter a share code to view a note"
-              dialogTitle="View note via share code"
-              submitLabel="View Note"
-              icon={Notebook}
+              submitLabel="Answer Quiz"
+              title="Answer Quiz Via Share code"
+              useFetchHook={useFetchQuizByCode}
+              description="Enter a share code to automatically add them to saved Quiz"
+              dialogTitle="Answer Quiz via Share code"
+              icon={SquarePen}
             />
-
             <AnimatePresence mode="popLayout">
-              {paginatedNotes.map((item, index) => (
+              {paginatedQuizzes.map((item, index) => (
                 <motion.div
                   key={item.id}
+                  layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -240,23 +233,22 @@ export default function SavedNotesSection() {
                     duration: 0.2,
                     delay: index * 0.05,
                   }}
-                  layout
                 >
-                  <SavedSummaryCard item={item} onDelete={unsaveSummary} />
+                  <SavedQuizCard item={item} />
                 </motion.div>
               ))}
             </AnimatePresence>
           </div>
 
-          {/* Results Counter */}
+          {/* Result count */}
           {debouncedSearch && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="mt-4 text-center text-sm text-muted-foreground"
             >
-              Found {sortedNotes.length}{" "}
-              {sortedNotes.length === 1 ? "note" : "notes"}
+              Found {sortedQuizzes.length}{" "}
+              {sortedQuizzes.length === 1 ? "quiz" : "quizzes"}
             </motion.div>
           )}
 

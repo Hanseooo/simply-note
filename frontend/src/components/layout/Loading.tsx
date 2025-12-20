@@ -18,7 +18,7 @@ export default function LoadingScreen({
     <div
       className={cn(
         "flex flex-col items-center justify-center gap-4 text-center",
-        overlay && "absolute inset-0 z-50 bg-background/80 backdrop-blur-sm",
+        overlay && "absolute inset-0 z-40 bg-background/80 backdrop-blur-sm",
         className
       )}
     >

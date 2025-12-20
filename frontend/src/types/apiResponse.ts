@@ -107,7 +107,10 @@ export type SavedQuizListItem = {
   created_by: string;
   is_pinned: boolean;
   linked_at: string;
+  share_code: string;
+  topics: QuizTopic[];
 };
+
 
 export type SavedSummaryMinimal = {
   id: string;

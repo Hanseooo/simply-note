@@ -7,7 +7,7 @@ import { getQuizByCodeApi } from "@/services/quizApi";
 export const useFetchQuizByCode = () => {
   const navigate = useNavigate();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: (code: string) => getQuizByCodeApi(code),
 
     onSuccess: ({ id }) => {
@@ -21,4 +21,10 @@ export const useFetchQuizByCode = () => {
       toast.error("Invalid or inaccessible quiz code.");
     },
   });
+
+  return {
+    fetchByCode: mutation.mutate,
+    isFetching: mutation.isPending,
+  };
 };
+

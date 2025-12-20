@@ -7,12 +7,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TopicRadarChart } from "@/components/charts/TopicRadarChart"; 
 import { TopicBarChart } from "@/components/charts/TopicBarChart"; 
 import MarkdownRenderer from "@/components/renderer/MarkdownRenderer"; 
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, RotateCcw } from "lucide-react";
+import { getRouteApi, useNavigate, } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export default function QuizResultPage() {
-  const { quiz, answers } = useQuizStore();
+  const { quiz, answers, resetQuiz } = useQuizStore();
+
+  const quizRoute = getRouteApi("/quiz/$quizId/result")
+
+  const navigate = useNavigate()
+  const quizId = quizRoute.useParams().quizId
+
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, [])
 
   if (!quiz) {
-    return <div className="p-6">No quiz results found.</div>;
+    return <div className="p-6 min-h-[80vh] flex flex-col items-center justify-center text-center w-full">
+      <h4 className="text-primary font-bold text-4xl mb-4">No Results Found</h4>
+      <Button onClick={() => navigate({ to: "/quizzes"})} variant={"link"}>Back to Quizzes</Button>
+    </div>;
   }
 
   const { totalCorrect, totalQuestions, perTopic } = scoreQuiz(quiz, answers);
@@ -108,13 +124,36 @@ export default function QuizResultPage() {
                   )}
 
                   {/* Explanation */}
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <div className="prose prose-sm dark:prose-invert max-w-none bg-primary/10 rounded-2xl">
                     <MarkdownRenderer content={q.explanation} />
                   </div>
                 </CardContent>
               </Card>
             );
           })}
+          <div className="w-full flex justify-between">
+            <Button
+              variant={"ghost"}
+              onClick={() => {
+                navigate({ to: "/quizzes" });
+              }}
+              className="text-primary font-bold"
+            >
+              <ArrowLeft className="h-4 w-4 text-primary" />
+              back
+            </Button>
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                resetQuiz();
+                navigate({ to: "/quiz/$quizId" , params: {quizId : quizId}});
+              }}
+              className="text-primary font-bold"
+            >
+              <RotateCcw className="h-4 w-4 text-primary" />
+              retry
+            </Button>
+          </div>
         </div>
       </motion.section>
     </main>

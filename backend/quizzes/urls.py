@@ -6,6 +6,7 @@ from .views import (
     SavedQuizzesView,
     QuizDetailView,
     GenerateQuizView,
+    QuizByCodeView,
 )
 
 urlpatterns = [
@@ -14,5 +15,6 @@ urlpatterns = [
     path("<uuid:quiz_id>/unpin/", UnpinQuizView.as_view()),
     path("<uuid:quiz_id>/unsave/", UnsaveQuizView.as_view()),
     path("<uuid:quiz_id>/", QuizDetailView.as_view()),
-    path("generate/", GenerateQuizView.as_view())
+    path("generate/", GenerateQuizView.as_view()),
+    path("share/<str:code>/", QuizByCodeView.as_view())
 ]

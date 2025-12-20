@@ -1,5 +1,6 @@
 import TitleHeader from "@/components/headers/TitleHeader";
 import GenerateQuiz from "@/sections/GenerateQuiz";
+import SavedQuizzes from "@/sections/SavedQuizzes";
 
 
 export default function QuizPage() {
@@ -17,6 +18,7 @@ export default function QuizPage() {
           titleWord2="Saved Quizzes"
           desc="Because you should try and try until you succeed right?"
         />
+        <SavedQuizzes />
       </main>
     );
 }

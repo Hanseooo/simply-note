@@ -12,6 +12,8 @@ class SavedQuizSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source="quiz.title")
     difficulty = serializers.CharField(source="quiz.difficulty")
     created_by = serializers.CharField(source="quiz.generated_by.username")
+    share_code = serializers.CharField(source="quiz.share_code")
+    topics = serializers.JSONField(source="quiz.topics")
 
     class Meta:
         model = QuizUser
@@ -22,6 +24,8 @@ class SavedQuizSerializer(serializers.ModelSerializer):
             "created_by",
             "is_pinned",
             "linked_at",
+            "share_code",
+            "topics"
         ]
 
 class QuizDetailSerializer(serializers.ModelSerializer):

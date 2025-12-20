@@ -2,15 +2,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { getMySavedSummariesApi } from "@/services/summaryApi";
 import { getMySavedRoadmapsApi } from "@/services/roadmapApi";
+import { getMySavedQuizzesApi } from "@/services/quizApi";
 
 type PinnedType = "Notes" | "Quizzes" | "Roadmaps";
 
 const getPinnedNotes = () => getMySavedSummariesApi({pinnedOnly : true})
 const getPinnedRoadmaps = () => getMySavedRoadmapsApi({pinnedOnly : true})
+const getPinnedQuizzes = () => getMySavedQuizzesApi({pinnedOnly : true})
 
 const fetchers: Record<PinnedType, () => Promise<any[]>> = {
   Notes: getPinnedNotes,
-  Quizzes: getMySavedSummariesApi, // no api for now
+  Quizzes: getPinnedQuizzes, 
   Roadmaps: getPinnedRoadmaps, 
 };
 

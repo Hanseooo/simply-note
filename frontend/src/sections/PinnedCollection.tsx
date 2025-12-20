@@ -1,14 +1,16 @@
+import SavedQuizCard from "@/components/cards/SavedQuizCard";
 import SavedRoadmapCard from "@/components/cards/savedRoadmapCard";
 import SavedSummaryCard from "@/components/cards/SavedSummaryCard";
 import ShareCodeButtonCard from "@/components/cards/ShareCodeButtonCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFetchQuizByCode } from "@/hooks/useFetchQuizByCode";
 import { useFetchRoadmapByCode } from "@/hooks/useFetchRoadmapByCode";
 import { useFetchSummaryByCode } from "@/hooks/useFetchSummaryByCode";
 import { usePinnedCollection } from "@/hooks/usePinnedCollection";
 // import { useSummary } from "@/hooks/useSummary";
 import { AnimatePresence } from "framer-motion";
-import { Map, Notebook } from "lucide-react";
+import { Map, Notebook, SquarePen } from "lucide-react";
 import { useState } from "react";
 
 type PinnedOptions = "Notes" | "Quizzes" | "Roadmaps";
@@ -96,6 +98,28 @@ export default function PinnedCollection() {
 
                 {pinnedData.map((item) => (
                   <SavedRoadmapCard key={item.id} item={item} />
+                ))}
+              </div>
+            </AnimatePresence>
+          )}
+        {!isLoading &&
+          data &&
+          pinnedData.length > 0 &&
+          selectedTab == "Quizzes" && (
+            <AnimatePresence>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {/* Add-by-share card */}
+                <ShareCodeButtonCard
+                  submitLabel="Answer Quiz"
+                  title="Answer Quiz Via Share code"
+                  useFetchHook={useFetchQuizByCode}
+                  description="Enter a share code to automatically add them to saved Quiz"
+                  dialogTitle="Answer Quiz via Share code"
+                  icon={SquarePen}
+                />
+
+                {pinnedData.map((item) => (
+                  <SavedQuizCard key={item.id} item={item} />
                 ))}
               </div>
             </AnimatePresence>

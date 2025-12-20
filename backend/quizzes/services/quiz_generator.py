@@ -12,6 +12,7 @@ def generate_quiz_ai(*, summary, options):
         system_prompt=QUIZ_SYSTEM_PROMPT,
         user_prompt=user_prompt,
         thinking_budget=2048,
+        model="gemini-2.5-flash",
     )
 
     return raw_json
