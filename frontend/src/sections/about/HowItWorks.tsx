@@ -27,7 +27,7 @@ const steps = [
     description: (
       <>
         The system analyzes your content and generates summaries, quizzes, and
-        roadmaps using AI.{" "}
+        roadmaps.{" "}
         <span className="font-semibold text-foreground">
           All generated content is strictly based on your notes
         </span>
@@ -55,7 +55,7 @@ export default function HowItWorks() {
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 80%", "end 20%"],
+    offset: ["start 65%", "end 20%"],
   });
 
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);

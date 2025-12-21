@@ -3,13 +3,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from django.conf import settings
 from api.email_adapter import BrevoEmailService
 from django.utils import timezone
 from datetime import timedelta
 import uuid
 from django.contrib.auth.hashers import check_password, make_password
 from dj_rest_auth.registration.views import RegisterView
-from .serializers import CustomRegisterSerializer
+from .serializers import CustomRegisterSerializer, ForgotPasswordSerializer, ResetPasswordSerializer, ChangeEmailConfirmSerializer, ChangeEmailRequestSerializer, ChangeUsernameSerializer
+from .models import PasswordResetToken
 import secrets
 
 User = get_user_model()
@@ -54,7 +57,6 @@ class VerifyEmailView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # ✅ Verify email
         user.is_email_verified = True
         user.email_verification_code = None
         user.email_verification_code_expires_at = None
@@ -115,7 +117,6 @@ class ResendVerificationCodeView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # 🔁 Generate new 6-digit code
         raw_code = f"{secrets.randbelow(900000) + 100000}"
 
 
@@ -187,3 +188,226 @@ class LoginAPIView(APIView):
                 "last_name": user.last_name
             }
         })
+    
+
+# users/views.py
+
+class ForgotPasswordView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+        user = User.objects.filter(email=email).first()
+
+        if user:
+            token = PasswordResetToken.objects.create(
+                user=user,
+                expires_at=timezone.now() + timedelta(minutes=30),
+            )
+
+            reset_url = (
+                f"{settings.FRONTEND_BASE_URL}/reset-password"
+                f"?token={token.token}"
+            )
+
+            adapter = BrevoEmailService()
+            adapter.send_password_reset_mail(user, reset_url)
+
+        # Always return success (no enumeration)
+        return Response(
+            {"detail": "If the email exists, a reset link has been sent."},
+            status=status.HTTP_200_OK,
+        )
+
+
+
+class ResetPasswordView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        token_value = serializer.validated_data["token"]
+        password = serializer.validated_data["password"]
+
+        try:
+            token = PasswordResetToken.objects.select_related("user").get(
+                token=token_value
+            )
+        except PasswordResetToken.DoesNotExist:
+            return Response(
+                {"detail": "Invalid or expired token"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not token.is_valid():
+            return Response(
+                {"detail": "Token expired or already used"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = token.user
+        user.set_password(password)
+        user.save(update_fields=["password"])
+
+        token.used_at = timezone.now()
+        token.save(update_fields=["used_at"])
+
+        return Response(
+            {"detail": "Password reset successful"},
+            status=status.HTTP_200_OK,
+        )
+
+
+
+class CheckUsernameView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        username = request.query_params.get("username")
+        if not username:
+            return Response(
+                {"detail": "Username is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        exists = User.objects.filter(username=username).exclude(
+            pk=request.user.pk
+        ).exists()
+
+        return Response({"available": not exists})
+
+
+
+class ChangeUsernameView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangeUsernameSerializer(
+            data=request.data,
+            context={"request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+
+        request.user.username = serializer.validated_data["username"]
+        request.user.save(update_fields=["username"])
+
+        return Response(
+            {"detail": "Username updated successfully"},
+            status=status.HTTP_200_OK,
+        )
+
+
+
+class ChangeEmailRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangeEmailRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        raw_code = f"{secrets.randbelow(900000) + 100000}"
+
+        user = request.user
+        user.pending_email = serializer.validated_data["email"]
+        user.pending_email_code = make_password(raw_code)
+        user.pending_email_expires_at = timezone.now() + timedelta(minutes=10)
+        user.pending_email_attempts = 0
+        user.save()
+
+        adapter = BrevoEmailService()
+        adapter.send_change_email_code(user, raw_code)
+
+        return Response(
+            {"detail": "Verification code sent"},
+            status=status.HTTP_200_OK,
+        )
+
+
+
+class ChangeEmailConfirmView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangeEmailConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+
+        if not user.pending_email or not user.pending_email_expires_at:
+            return Response(
+                {"detail": "No email change requested"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if timezone.now() > user.pending_email_expires_at:
+            return Response(
+                {"detail": "Verification code expired"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user.pending_email_attempts >= 5:
+            return Response(
+                {"detail": "Too many attempts"},
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        if not check_password(
+            serializer.validated_data["code"],
+            user.pending_email_code,
+        ):
+            user.pending_email_attempts += 1
+            user.save(update_fields=["pending_email_attempts"])
+            return Response(
+                {"detail": "Invalid verification code"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Atomic commit
+        user.email = user.pending_email
+        user.is_email_verified = True
+        user.pending_email = None
+        user.pending_email_code = None
+        user.pending_email_expires_at = None
+        user.pending_email_attempts = 0
+        user.save()
+
+        return Response(
+            {"detail": "Email updated successfully"},
+            status=status.HTTP_200_OK,
+        )
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.hashers import make_password
+
+from .serializers import ChangePasswordSerializer
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(
+            data=request.data,
+            context={"request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        user.password = make_password(
+            serializer.validated_data["new_password"]
+        )
+        user.save(update_fields=["password"])
+
+        return Response(
+            {"detail": "Password changed successfully"},
+            status=status.HTTP_200_OK,
+        )

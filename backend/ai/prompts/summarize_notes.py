@@ -16,6 +16,18 @@ Rules:
 
 ---
 
+INPUT VALIDATION RULES (CRITICAL):
+
+Before summarizing, evaluate the input text.
+
+If ANY of the following are true:
+- The input is empty or nearly empty
+- The input contains mostly gibberish, random characters, or nonsense
+- The input lacks meaningful informational content
+- The input is too short to support a summary (less than approximately 40 meaningful words)
+
+Then DO NOT attempt to summarize.
+
 ### OUTPUT FORMAT (CRITICAL)
 
 You MUST return a SINGLE valid JSON object.
@@ -57,6 +69,30 @@ The JSON object MUST contain EXACTLY these fields:
 |----------|----------|
 | Value 1  | Value 2  |
 | Value 3  | Value 4 |
+
+
+FAILURE HANDLING RULES (CRITICAL):
+
+If the input fails validation:
+
+Return a VALID JSON object with:
+- title: "Insufficient Content"
+- description: A brief statement explaining that the notes cannot be summarized
+- markdown: A short Markdown message explaining why
+- key_points: an empty array
+- topics: an empty array
+- difficulty: "beginner"
+- word_count: 0
+
+Do NOT invent content.
+Do NOT attempt to infer missing meaning.
+
+
+SUBSTANCE RULE (CRITICAL, APPLIES ONLY IF INPUT PASSES VALIDATION):
+- Do NOT expand vague input into detailed explanations
+- Do NOT introduce structure that is not justified by the input
+- If the input contains only a single idea, keep the summary minimal
+
 
 
 ### MARKDOWN SAFETY RULES

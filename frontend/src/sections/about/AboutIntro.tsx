@@ -11,7 +11,7 @@ export default function AboutIntro() {
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 80%", "end 20%"],
+    offset: ["start 60%", "end 20%"],
   });
 
   // Scroll-synced animations
@@ -20,7 +20,10 @@ export default function AboutIntro() {
   const scale = useTransform(scrollYProgress, [0, 1], [0.98, 1]);
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-background  py-24">
+    <section
+      ref={ref}
+      className="relative overflow-hidden bg-background  py-24"
+    >
       {/* Subtle background accent */}
       <div className="pointer-events-none absolute inset-0 bg-radial from-primary/10 via-transparent to-transparent" />
 
@@ -36,11 +39,16 @@ export default function AboutIntro() {
           What is SimplyNote
         </Badge>
 
-        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground"
+        >
           Learn from <span className="text-primary">your own content</span>
-        </h2>
+        </motion.h2>
 
-        <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+        <p className="mt-8 sm:mt-6 text-start sm:text-center text-lg leading-relaxed text-muted-foreground">
           SimplyNote is an{" "}
           <span className="font-semibold text-foreground">
             AI-powered learning productivity web application
@@ -52,7 +60,7 @@ export default function AboutIntro() {
           that reinforce understanding.
         </p>
 
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        <p className="mt-6 text-start sm:text-center text-base leading-relaxed text-muted-foreground">
           Every quiz, roadmap, and explanation is{" "}
           <span className="font-semibold">
             grounded in the source material you provide

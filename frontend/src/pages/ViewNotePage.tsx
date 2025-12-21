@@ -45,7 +45,7 @@ export default function ViewNotePage({
 
       {/* Main content */}
       <div className="px-4 sm:px-6">
-        <Card className="mt-6 max-w-4xl mx-auto bg-linear-to-tr from-card/20 via-primary/10 to card/5">
+        <Card className="mt-6 max-w-4xl mx-auto bg-card">
           <CardHeader>
             <CardTitle className="text-2xl sm:text-4xl border-b pb-6 font-bold text-primary text-center">
               Note Summary
