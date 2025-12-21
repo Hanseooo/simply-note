@@ -66,14 +66,15 @@ export default function NoteSummarizer() {
       )}
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-col sm:flex-row gap-6 items-center">
             {
                 summarizeQuota && (
                     <AIQuotaProgress
                     max={summarizeQuota.max_credits}
                     label="Remaining Credits"
                     remaining={summarizeQuota.remaining_credits}
-                    disabled={!canGenerate}
+                    secondsUntilReset={summarizeQuota.seconds_until_reset}
+                    className="mb-2"
                     />
                 )
             }

@@ -89,6 +89,7 @@ export default function RoadmapGenerator() {
           remaining={generateRoadmapQuota.remaining_credits}
           disabled={!canGenerate}
           className="mb-6 mx-auto"
+          secondsUntilReset={generateRoadmapQuota.seconds_until_reset}
         />
       )}
       <div className="rounded-xl border bg-linear-to-tr from-background/25 via-card/25 to-primary/5 p-6 shadow-sm space-y-6">

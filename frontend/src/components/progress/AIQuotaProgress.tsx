@@ -14,7 +14,6 @@ export function AIQuotaProgress({
   remaining,
   max,
   secondsUntilReset,
-  disabled,
   className = ""
 }: AIQuotaProgressProps) {
   const percentage = Math.min((remaining / max) * 100, 100);
@@ -30,7 +29,7 @@ export function AIQuotaProgress({
 
       <Progress className="my-2" value={percentage} />
 
-      {disabled && secondsUntilReset !== undefined && (
+      {remaining < max && secondsUntilReset !== undefined && (
         <p className="text-xs text-muted-foreground">
           Resets in {Math.ceil(secondsUntilReset / 60)} min
         </p>

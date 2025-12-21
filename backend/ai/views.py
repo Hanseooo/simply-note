@@ -79,29 +79,50 @@ class SummarizeNotesAPIView(APIView):
 
         return Response(serializer.validated_data)
 
+from django.db import transaction
+
 class AIQuotaStatusAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         AIQuotaService.ensure_all_buckets(request.user)
 
-        data = []
         now = timezone.now()
+        data = []
 
-        for quota in AIQuotaBucket.objects.filter(user=request.user):
-            window_end = quota.window_started_at + timedelta(hours=quota.window_hours)
+        with transaction.atomic():
+            quotas = (
+                AIQuotaBucket.objects
+                .select_for_update()
+                .filter(user=request.user)
+            )
 
-            data.append({
-                "bucket": quota.bucket,
-                "used_credits": quota.used_credits,
-                "max_credits": quota.max_credits,
-                "remaining_credits": max(
-                    quota.max_credits - quota.used_credits, 0
-                ),
-                "window_ends_at": window_end,
-                "seconds_until_reset": max(
-                    int((window_end - now).total_seconds()), 0
-                ),
-            })
+            for quota in quotas:
+                window_end = quota.window_started_at + timedelta(
+                    hours=quota.window_hours
+                )
+
+                if now >= window_end:
+                    quota.window_started_at = now
+                    quota.used_credits = 0
+                    quota.save(update_fields=[
+                        "window_started_at",
+                        "used_credits",
+                        "updated_at",
+                    ])
+                    window_end = now + timedelta(hours=quota.window_hours)
+
+                data.append({
+                    "bucket": quota.bucket,
+                    "used_credits": quota.used_credits,
+                    "max_credits": quota.max_credits,
+                    "remaining_credits": max(
+                        quota.max_credits - quota.used_credits, 0
+                    ),
+                    "window_ends_at": window_end,
+                    "seconds_until_reset": max(
+                        int((window_end - now).total_seconds()), 0
+                    ),
+                })
 
         return Response(data)

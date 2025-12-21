@@ -1,4 +1,5 @@
 import { HeroGeometric } from "@/components/ui/shadcn-io/shape-landing-hero";
+import AboutSection from "@/sections/AboutSection";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -49,6 +50,7 @@ export default function LandingPage() {
             <Moon className="w-5 h-5 sm:w-6 sm:h-6" />
           )}
         </button>
+        <AboutSection />
       </div>
     );
 }
