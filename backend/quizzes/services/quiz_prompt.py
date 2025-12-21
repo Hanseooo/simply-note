@@ -19,6 +19,12 @@ CONTENT SAFETY RULES:
 - Never guess missing information
 - Prefer fewer high-quality questions over many low-quality ones
 
+PLANNING RULE (INTERNAL):
+- Before generating questions, determine the smallest possible set of topics that can fairly represent the summary
+- Validate that each topic can support the required minimum number of questions
+- If not, reduce the number of topics
+
+
 QUESTION DESIGN RULES:
 - Questions must be clear and unambiguous
 - Answers must be objectively correct
@@ -29,9 +35,34 @@ QUESTION DESIGN RULES:
 
 TOPIC RULES:
 - Topics must be derived ONLY from the summary content
+- Topic labels should abstract and group related ideas rather than mirror exact wording
 - Topics must be reusable across multiple questions
 - Each question must reference EXACTLY ONE topic
 - Do NOT create subtopics inside questions
+
+TOPIC GRANULARITY RULE (CRITICAL):
+- Topics must represent broad, assessable concepts, not specific facts or examples
+- Do NOT create a topic unless it can support multiple distinct questions
+- Avoid overly narrow or one-off topics
+- Prefer conceptual grouping over exact phrasing from the summary
+
+TOPIC QUESTION DENSITY RULE (CRITICAL):
+- Each topic MUST be referenced by at least 3 questions
+- If a topic cannot support at least 3 high-quality questions, it MUST NOT be created
+- Merge related ideas into a single broader topic when necessary
+
+TOPIC COUNT RULE:
+- Total number of topics MUST NOT exceed:
+  - 3 topics for short_quiz = true
+  - 4 to 5 topics for short_quiz = false
+- Prefer fewer topics with deeper coverage over more topics with shallow coverage
+
+TOPIC QUESTION DISTRIBUTION RULE (CRITICAL):
+- All topics MUST have the SAME number of questions
+- Minimum questions per topic: 3
+- If equal distribution is not possible, reduce the number of topics
+
+
 
 DIFFICULTY RULES:
 - difficulty MUST be one of: easy, medium, hard
@@ -76,6 +107,7 @@ MATH CONTENT RULES (CRITICAL):
   - names
   - definitions
   - labels
+- If the summary contains formulas, identification/fill_blank answers must still remain atomic; use multiple_choice for multi-component formulas
 - If this rule is violated, the output is INVALID
 
 QUIZ LENGTH RULE:
@@ -90,7 +122,15 @@ ATOMIC ANSWER RULE:
   - no lists
   - no structured data
   - no multi-part answers
-- If the correct answer has more than one component, use multiple_choice instead
+  - no Markdown or LaTeX formatting
+- Allowed for fill_blank and identification:
+  - plain text
+  - single numbers (integers or decimals)
+  - simple variables (x, y, z)
+- Forbidden in fill_blank and identification:
+  - fractions, exponents, roots, integrals, sums, or any math requiring Markdown/LaTeX
+  - special symbols (Δ, ∞, ±, ≈)
+- If the correct answer has more than one component or requires formatting, use multiple_choice instead
 
 
 

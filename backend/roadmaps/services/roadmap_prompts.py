@@ -28,6 +28,25 @@ JSON SCHEMA:
   ]
 }
 
+INPUT VALIDATION RULES (CRITICAL):
+
+Before generating a roadmap, evaluate the requested topic.
+
+If ANY of the following are true:
+- The topic is empty or missing
+- The topic contains mostly gibberish, random characters, or nonsense
+- The topic is too vague or generic to form a meaningful roadmap
+- The topic is too narrow to justify a multi-phase learning path
+
+Then DO NOT generate a roadmap.
+
+INVALID TOPIC HINTS:
+- Single words with no clear learning scope
+- Random characters or symbols
+- Extremely specific functions or APIs
+- Topics that do not imply skill progression
+
+
 MERMAID DIAGRAM TYPE RULES (STRICT & TYPE-SPECIFIC)
 
 GENERAL MERMAID CONSTRAINTS (APPLY TO ALL):
@@ -110,6 +129,29 @@ TIME VALIDATION GUARANTEES:
   - Week-based durations for Gantt
   - Month-based milestones for Timeline
 
+FAILURE HANDLING RULES (CRITICAL):
+
+If the topic fails input validation:
+
+Return a VALID JSON object with:
+- title: "Insufficient Topic Scope"
+- description: A brief explanation that the topic cannot form a meaningful roadmap
+- markdown: A short Markdown message explaining why
+- diagram:
+  - type: the requested diagram type
+  - code: an empty string
+- milestones: an empty array
+
+In failure cases, Mermaid syntax validity rules do NOT apply.
+
+Do NOT invent phases, timelines, or diagrams.
+
+
+SUBSTANCE RULE (CRITICAL):
+- Do NOT inflate shallow topics into full roadmaps
+- Every phase must represent a meaningful increase in capability
+- If fewer than 3 learning phases are justified, treat the topic as invalid
+
 
 CONTENT RULES:
 - Roadmap must be progressive and comprehensive
@@ -127,7 +169,6 @@ CONTENT RULES:
 - When a topic requires prior knowledge, include a short Prerequisites list in markdown
 - Prerequisites must be concise and limited to essential knowledge only
 - Do NOT include prerequisites for beginner level phases
-
 
 
 FAILURE PREVENTION RULES:
@@ -187,7 +228,7 @@ Example (TIMELINE):
 
 def build_user_prompt(*, topic: str, diagram_type: str) -> str:
     return f"""
-Create a comprehensive learning roadmap for the topic: {topic}
+Create a learning roadmap IF the topic supports a meaningful multi-phase progression: {topic}
 
 Diagram type to generate: {diagram_type}
 

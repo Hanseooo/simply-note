@@ -1,9 +1,9 @@
-import { api } from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
+import { requestPasswordResetApi } from "@/services/authApi";
 
 export const useForgotPassword = () => {
   return useMutation({
-    mutationFn: (email: string) =>
-      api.post("/api/auth/password/reset/", { email }),
+    mutationFn: requestPasswordResetApi,
+    retry: false,
   });
 };

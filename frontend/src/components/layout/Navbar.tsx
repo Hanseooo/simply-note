@@ -9,17 +9,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LogOut, User, Menu, X } from "lucide-react";
+import { LogOut, User, LucideMessageCircleQuestionMark, Settings, Home, Notebook, Map, PenBoxIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLogout } from "@/hooks/useLogout";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 
 export default function Navbar() {
   const { user } = useAuthStore();
   const logout = useLogout();
   const navigate = useNavigate();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
     { name: "Home", path: "/home" },
@@ -61,28 +59,12 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right — Desktop user dropdown & Mobile menu button */}
         <div className="flex items-center gap-2">
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              onClick={() => setMobileOpen((prev) => !prev)}
-            >
-              {mobileOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
-          </div>
-
-          {/* Desktop user dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="hidden md:flex items-center gap-2 rounded-full px-2"
+                className="flex items-center gap-2 rounded-full px-2"
               >
                 <Avatar className="h-8 w-8">
                   <AvatarFallback>
@@ -103,11 +85,66 @@ export default function Navbar() {
                 </div>
               </DropdownMenuLabel>
 
-              {/* <DropdownMenuSeparator /> */}
+              {/* Mobile-only nav links */}
+              <div className="md:hidden">
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => navigate({ to: "/home" })}
+                  className="cursor-pointer"
+                >
+                    <Home />
+                  Home
+                </DropdownMenuItem>
 
-              {/* <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onClick={() => navigate({ to: "/notes" })}
+                  className="cursor-pointer"
+                >
+                    <Notebook />
+                  Notes
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onClick={() => navigate({ to: "/quizzes" })}
+                  className="cursor-pointer"
+                >
+                    <PenBoxIcon />
+                  Quizzes
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onClick={() => navigate({ to: "/roadmaps" })}
+                  className="cursor-pointer"
+                >
+                    <Map />
+                  Roadmaps
+                </DropdownMenuItem>
+              </div>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={() => navigate({ to: "/settings/account" })}
+                className="cursor-pointer"
+              >
                 <Settings className="mr-2 h-4 w-4" /> Settings
-              </DropdownMenuItem> */}
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={() => navigate({ to: "/about" })}
+                className="cursor-pointer"
+              >
+                <LucideMessageCircleQuestionMark className="mr-2 h-4 w-4" />{" "}
+                About
+              </DropdownMenuItem>
 
               <DropdownMenuSeparator />
 
@@ -121,44 +158,6 @@ export default function Navbar() {
           </DropdownMenu>
         </div>
       </div>
-
-      {/* Mobile nav menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-background/50 backdrop-blur-md border-t border-primary">
-          <div className="flex flex-col  px-4 py-2 gap-2">
-            {navLinks.map((link) => (
-              <Button
-                key={link.name}
-                variant="ghost"
-                className="w-full justify-end text-muted-foreground"
-                onClick={() => {
-                  navigate({ to: link.path });
-                  setMobileOpen(false);
-                }}
-              >
-                {link.name}
-              </Button>
-            ))}
-
-            {/* Mobile Settings & Logout buttons */}
-            <div className="flex flex-col gap-2 pt-2 border-t border-primary">
-              {/* <Button
-                variant="ghost"
-                className="w-full justify-end text-muted-foreground"
-              >
-                <Settings className="mr-2 h-4 w-4" /> Settings
-              </Button> */}
-              <Button
-                variant="ghost"
-                className="w-full justify-end text-destructive"
-                onClick={() => logout.mutate()}
-              >
-                <LogOut className="mr-2 h-4 w-4" /> Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 }

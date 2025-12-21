@@ -98,10 +98,11 @@ export default function LoginPage() {
 
 
   return (
-    <motion.div className="min-h-screen flex items-center justify-center bg-radial from-primary/10 px-4"
-    initial={{ opacity: 0, }}
-    animate={{ opacity: 1, }}
-    transition={{ duration: 0.5, ease: "easeInOut" }}
+    <motion.div
+      className="min-h-screen flex items-center justify-center bg-radial from-primary/10 px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <Card className="w-full max-w-md shadow-2xl bg-card/50 shadow-primary/10">
         <CardHeader className="space-y-1">
@@ -123,21 +124,37 @@ export default function LoginPage() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Username or Email</Label>
-            <Input id="email" type="text" placeholder="you@example.com"
-            value={username} onChange={(e) => setUsername(e.target.value)}
+            <Input
+              id="email"
+              type="text"
+              placeholder="you@example.com"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••"
-            value={password} onChange={(e) => setPassword(e.target.value)}
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          <div className=" flex">
+            <Button 
+            onClick={() => navigate({to : "/forgot-password"})}
+            className="self-end text-primary h-6 ml-auto justify-end"
+            variant={"link"}>
+              Forgot Password
+            </Button>
+          </div>
 
-          <Button className="w-full"
-        onClick={() => handleSubmit()}
-          >Login</Button>
+          <Button className="w-full" onClick={() => handleSubmit()}>
+            Login
+          </Button>
 
           <div className="text-center mt-2 text-sm text-muted-foreground">
             Don’t have an account?{" "}
