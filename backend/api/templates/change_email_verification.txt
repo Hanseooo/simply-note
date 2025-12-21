@@ -1,0 +1,13 @@
+Hello {{ USERNAME }},
+
+You requested to change the email address linked to your SimplyNote account.
+
+Your verification code is:
+
+{{ VERIFICATION_CODE }}
+
+This code will expire in 10 minutes.
+
+If you did not request this change, you can safely ignore this email.
+
+— SimplyNote Team

@@ -29,7 +29,7 @@ export default function Footer() {
               <a
                 href="https://github.com/Hanseooo"
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
               >
                 GitHub
               </a>
@@ -39,7 +39,7 @@ export default function Footer() {
               <a
                 href="https://hanseooo.vercel.app"
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
               >
                 Portfolio
               </a>
@@ -49,7 +49,7 @@ export default function Footer() {
               <a
                 href="https://www.linkedin.com/in/hanseooo"
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
               >
                 LinkedIn
               </a>
