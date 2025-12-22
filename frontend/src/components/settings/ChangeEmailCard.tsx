@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { InlineError } from "@/components/ui/InlineError";
 import { toast } from "sonner";
-import { useChangeEmail } from "@/hooks/useChangeEmail";
 import { useVerifyEmailChange } from "@/hooks/useVerifyEmailChange";
+import { useRequestEmailChange } from "@/hooks/useRequestEmailChange";
 
 export const ChangeEmailCard = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ export const ChangeEmailCard = () => {
   const [step, setStep] = useState<"email" | "code">("email");
   const [error, setError] = useState<string>();
 
-  const requestChange = useChangeEmail();
+  const requestChange = useRequestEmailChange();
   const verifyChange = useVerifyEmailChange();
 
   const isEmailValid = useMemo(() => /\S+@\S+\.\S+/.test(email), [email]);

@@ -104,7 +104,7 @@ export default function DeveloperNote() {
                   <span className="font-semibold text-foreground">
                     credit-based system
                   </span>{" "}
-                  that resets every few hours. This keeps the platform fast,
+                  that resets after few hours. This keeps the platform fast,
                   fair, and sustainable without hidden costs.
                 </p>
               </div>
