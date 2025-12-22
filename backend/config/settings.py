@@ -105,6 +105,7 @@ INSTALLED_APPS = [
     "roadmaps",
     "common",
     "quizzes",
+    "feedback",
 ]
 
 

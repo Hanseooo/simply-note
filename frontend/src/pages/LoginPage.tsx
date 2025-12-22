@@ -104,7 +104,7 @@ export default function LoginPage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <Card className="w-full max-w-md shadow-2xl bg-card/50 shadow-primary/10">
+      <Card className="w-full max-w-md shadow-2xl bg-sidebar/40 shadow-primary/10">
         <CardHeader className="space-y-1">
           {/* Back button */}
           <Button

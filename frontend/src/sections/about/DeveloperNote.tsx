@@ -29,7 +29,7 @@ export default function DeveloperNote() {
         style={{ opacity, y }}
         className="relative mx-auto max-w-4xl px-4"
       >
-        <Card className="border-border/50 bg-card/70 backdrop-blur-sm rounded-2xl">
+        <Card className="border-border/50 bg-sidebar backdrop-blur-sm rounded-2xl">
           <CardContent className="p-6 sm:p-10">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-6">
@@ -110,14 +110,14 @@ export default function DeveloperNote() {
               </div>
 
               <p>
-                All of the core features are already here, and more
+                All of the core features are already here, and minor
                 improvements will come over time. Thank you for trying
                 SimplyNote. Please use it responsibly, and I hope it genuinely
                 helps your learning.
               </p>
 
               <p className="text-sm text-muted-foreground">
-                I’m planning to add a feedback system soon, and I’d love to hear
+                After using SimplyNote, please send a feedback! I’d love to hear
                 your thoughts.
               </p>
 

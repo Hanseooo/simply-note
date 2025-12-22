@@ -1,3 +1,5 @@
+import type { FeedbackType } from "./apiPayloads";
+
 export type RegisterResponse = {
   key: string;
 };
@@ -134,10 +136,10 @@ export type QuizQuestion = {
   id: string;
   type: QuizQuestionType;
   topic_id: string;
-  question: string; 
-  choices: string[] | null; 
+  question: string;
+  choices: string[] | null;
   answer: string | boolean;
-  explanation: string; 
+  explanation: string;
 };
 
 export type QuizContent = {
@@ -181,8 +183,29 @@ export type AIQuotaStatusItem = {
   max_credits: number;
   remaining_credits: number;
 
-  window_ends_at: string; 
+  window_ends_at: string;
   seconds_until_reset: number;
 };
 
 export type AIQuotaStatusResponse = AIQuotaStatusItem[];
+
+export interface Feedback {
+  id: number;
+  feedback_type: FeedbackType;
+  rating: number | null;
+  message: string | null;
+  context: string | null;
+  username: string; 
+  created_at: string;
+}
+
+
+export interface PaginatedFeedbackResponse {
+  count: number;
+  results: Feedback[];
+}
+
+export interface MyRatingResponse {
+  rating: number | null;
+  updated_at?: string;
+}

@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LogOut, User, LucideMessageCircleQuestionMark, Settings, Home, Notebook, Map, PenBoxIcon } from "lucide-react";
+import { LogOut, User, LucideMessageCircleQuestionMark, Settings, Home, Notebook, Map, PenBoxIcon, MessagesSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLogout } from "@/hooks/useLogout";
 import { useNavigate } from "@tanstack/react-router";
@@ -92,7 +92,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/home" })}
                   className="cursor-pointer"
                 >
-                    <Home />
+                  <Home />
                   Home
                 </DropdownMenuItem>
 
@@ -102,7 +102,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/notes" })}
                   className="cursor-pointer"
                 >
-                    <Notebook />
+                  <Notebook />
                   Notes
                 </DropdownMenuItem>
 
@@ -112,7 +112,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/quizzes" })}
                   className="cursor-pointer"
                 >
-                    <PenBoxIcon />
+                  <PenBoxIcon />
                   Quizzes
                 </DropdownMenuItem>
 
@@ -122,7 +122,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/roadmaps" })}
                   className="cursor-pointer"
                 >
-                    <Map />
+                  <Map />
                   Roadmaps
                 </DropdownMenuItem>
               </div>
@@ -144,6 +144,17 @@ export default function Navbar() {
               >
                 <LucideMessageCircleQuestionMark className="mr-2 h-4 w-4" />{" "}
                 About
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+
+              <DropdownMenuItem
+                onClick={() => navigate({ to: "/feedback" })}
+                className="cursor-pointer"
+              >
+                <MessagesSquare className="mr-2 h-4 w-4" />{" "}
+                Feedback
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />

@@ -112,7 +112,7 @@ export function GenerateQuizCard({ summary, canGenerate }: Props) {
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       className="h-full"
     >
-      <Card className="h-full bg-background/40 border-primary/20 hover:border-primary transition-colors hover:text-primary">
+      <Card className="h-full bg-card/40 border-primary/20 hover:border-primary transition-colors hover:text-primary">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-lg font-semibold leading-tight line-clamp-2">
             {summary.title}
