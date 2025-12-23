@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .services.gemini_client import generate_json_content
-from .prompts.summarize_notes import SYSTEM_PROMPT
+from .prompts.summarize_notes import SYSTEM_PROMPT, build_summarize_prompt
 from .serializers import SummarySerializer
 from rest_framework.permissions import IsAuthenticated
 from ai.throttles import AIGenerationBurstThrottle
@@ -39,7 +39,7 @@ class SummarizeNotesAPIView(APIView):
         try:
             raw_output = generate_json_content(
                 system_prompt=SYSTEM_PROMPT,
-                user_prompt=original_text,
+                user_prompt=build_summarize_prompt(original_text),
                 thinking_budget=-1,
             )
 

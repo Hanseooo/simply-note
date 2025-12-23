@@ -17,36 +17,55 @@ import { getGeneralAIQuota, useAIQuota } from "@/hooks/useAiQuota";
 import { AIQuotaProgress } from "@/components/progress/AIQuotaProgress";
 
 const MIN_CHARS = 3;
-const MAX_CHARS = 42;
+const MAX_CHARS = 52;
 
 const placeholders = [
-  "Learn React from scratch",
-  "Data Structures and Algorithms roadmap",
-  "Become a Full Stack Developer",
-  "Introduction to Machine Learning",
-  "Backend development with Node.js",
+  // Short & time-bound examples
+  "7-day study plan for React basics",
+  "30-day roadmap for Data Structures",
+  "2-week crash course on Git & GitHub",
 
+  // Programming & tech careers
+  "Learn React from scratch",
+  "2-month Full Stack Developer roadmap",
+  "Backend development with Node.js",
+  "Frontend roadmap with HTML, CSS, JS",
+  "Introduction to Machine Learning",
+  "Python roadmap for beginners",
+
+  // Engineering disciplines
   "Electrical Engineering fundamentals",
   "Mechanical Engineering core concepts",
   "Civil Engineering structural design",
   "Embedded systems learning path",
+  "3-month roadmap for control systems",
 
+  // Business & finance
   "Basics of Financial Accounting",
   "Investment banking preparation roadmap",
   "Entrepreneurship for beginners",
   "Marketing fundamentals",
+  "Startup roadmap from idea to MVP",
 
+  // Science & academics
   "Physics for engineering students",
-  "Organic chemistry study plan",
+  "Organic chemistry 1-month study plan",
   "Biology fundamentals roadmap",
   "Mathematics for data science",
+  "Linear algebra roadmap for ML",
 
+  // Design & product
   "UI/UX design learning roadmap",
   "Graphic design fundamentals",
   "Product design from ideation to launch",
+  "Figma to design system roadmap",
 
+  // Research & writing
   "Research paper writing roadmap",
+  "Literature review roadmap for students",
+  "Thesis preparation roadmap (3 months)",
 ];
+
 
 
 export default function RoadmapGenerator() {
