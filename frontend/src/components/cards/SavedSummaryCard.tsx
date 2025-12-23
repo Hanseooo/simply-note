@@ -76,7 +76,7 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       className="h-full"
     >
-      <Card className="relative flex flex-col justify-between border-primary/20 bg-linear-to-tr from-background/75 to-background shadow-sm transition-all hover:shadow-lg">
+      <Card className="relative h-full flex flex-col justify-between border-primary/20 bg-linear-to-tr from-background/75 to-primary/5 shadow-sm transition-all hover:shadow-lg">
         {/* Pin */}
         <div className="absolute right-3 top-3 z-10">
           <Tooltip>
@@ -108,7 +108,7 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
           </Tooltip>
         </div>
 
-        <CardHeader className="space-y-3">
+        <CardHeader className="space-y-3 pr-8">
           <h3 className="text-xl font-bold leading-tight tracking-tight">
             {item.title}
           </h3>
@@ -184,7 +184,7 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
             </Dialog>
 
             {/* Delete */}
-            <Dialog  open={confirmDelete} onOpenChange={setConfirmDelete}>
+            <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <DialogTrigger asChild>
@@ -198,7 +198,9 @@ export default function SavedSummaryCard({ item, onDelete }: Props) {
 
               <DialogContent className="border border-primary bg-linear-to-tr from-background to-primary/5">
                 <DialogHeader>
-                  <DialogTitle className="text-primary">Delete this note?</DialogTitle>
+                  <DialogTitle className="text-primary">
+                    Delete this note?
+                  </DialogTitle>
                 </DialogHeader>
 
                 <p className="text-sm text-muted-foreground">

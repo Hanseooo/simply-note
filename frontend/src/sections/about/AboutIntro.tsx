@@ -43,12 +43,12 @@ export default function AboutIntro() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground"
+          className="text-4xl  sm:text-5xl font-extrabold tracking-tight text-foreground"
         >
           Learn from <span className="text-primary">your own content</span>
         </motion.h2>
 
-        <p className="mt-8 sm:mt-6 text-start sm:text-center text-lg leading-relaxed text-muted-foreground">
+        <p className="mt-8 sm:mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground">
           SimplyNote is an{" "}
           <span className="font-semibold text-foreground">
             AI-powered learning productivity web application
@@ -60,7 +60,7 @@ export default function AboutIntro() {
           that reinforce understanding.
         </p>
 
-        <p className="mt-6 text-start sm:text-center text-base leading-relaxed text-muted-foreground">
+        <p className="mt-6 text-sm sm:text-base leading-relaxed text-muted-foreground">
           Every quiz, roadmap, and explanation is{" "}
           <span className="font-semibold">
             grounded in the source material you provide

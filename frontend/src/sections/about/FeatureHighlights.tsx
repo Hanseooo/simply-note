@@ -67,7 +67,7 @@ const features = [
 
 export default function FeatureHighlights() {
   return (
-    <section className="relative bg-background py-24">
+    <section className="relative py-24">
       {/* Header */}
       <div className="mx-auto max-w-3xl text-center px-4">
         <Badge variant="secondary" className="mb-4">

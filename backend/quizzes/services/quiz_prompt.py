@@ -17,7 +17,6 @@ CRITICAL RULES (FAIL IF ANY ARE BROKEN):
 CONTENT SAFETY RULES:
 - If the content is insufficient to generate a question, skip it
 - Never guess missing information
-- Prefer fewer high-quality questions over many low-quality ones
 
 PLANNING RULE (INTERNAL):
 - Before generating questions, determine the smallest possible set of topics that can fairly represent the summary
@@ -111,8 +110,8 @@ MATH CONTENT RULES (CRITICAL):
 - If this rule is violated, the output is INVALID
 
 QUIZ LENGTH RULE:
-- If `short_quiz` is false, attempt to generate at least 8 questions.
-- Do not pad or invent content just to reach more than 8 questions.
+- If `short_quiz` is false, attempt to generate at least 9 questions.
+- Do not pad or invent content just to reach more than 9 questions.
 - If `short_quiz` is true, generate as few as 5-7 questions.
 
 

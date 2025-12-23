@@ -14,3 +14,13 @@ export type VerifyEmailPayload = {
   key: string;
   code: string;
 };
+
+export type FeedbackType = "rating" | "bug" | "suggestion";
+
+export interface FeedbackPayload {
+  feedback_type: FeedbackType;
+  rating?: number;
+  message?: string;
+  context?: string;
+  is_anonymous: boolean;
+}

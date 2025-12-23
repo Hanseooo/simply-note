@@ -79,7 +79,7 @@ export default function SavedRoadmapCard({ item }: Props) {
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       className="h-full"
     >
-      <Card className="relative flex flex-col justify-between h-full border-primary/20 bg-linear-to-tr from-background/80 to-background shadow-sm transition-all hover:shadow-lg">
+      <Card className="relative flex flex-col justify-between h-full border-primary/20 bg-linear-to-tr from-background/75 to-primary/5 shadow-sm transition-all hover:shadow-lg">
         {/* Pin */}
         <div className="absolute right-3 top-3 z-10">
           <Tooltip>
@@ -108,7 +108,7 @@ export default function SavedRoadmapCard({ item }: Props) {
           </Tooltip>
         </div>
 
-        <CardHeader className="space-y-3">
+        <CardHeader className="space-y-3 pr-8">
           <h3 className="text-xl font-bold leading-tight tracking-tight">
             {item.title}
           </h3>

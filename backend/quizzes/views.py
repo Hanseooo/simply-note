@@ -41,11 +41,6 @@ class GenerateQuizView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_classes = [AIGenerationBurstThrottle]
     def post(self, request):
-        AIQuotaService.consume(
-            user=request.user,
-            bucket=AIQuotaBucket.BUCKET_QUIZ,
-            cost=AICreditCost.QUIZ_GENERATION,
-        )
 
         serializer = GenerateQuizSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -77,6 +72,12 @@ class GenerateQuizView(APIView):
         # Validate structure
         validator = QuizContentSerializer(data=quiz_data)
         validator.is_valid(raise_exception=True)
+
+        AIQuotaService.consume(
+            user=request.user,
+            bucket=AIQuotaBucket.BUCKET_QUIZ,
+            cost=AICreditCost.QUIZ_GENERATION,
+        )
 
         # Atomic save
         with transaction.atomic():

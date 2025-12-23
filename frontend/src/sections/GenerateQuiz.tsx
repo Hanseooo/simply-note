@@ -164,8 +164,8 @@ const filtered = useMemo(() => {
           <div className="mb-6">
             <AIQuotaProgress
               label="Remaining Quiz Credits"
-              remaining={quizQuota.remaining_credits}
-              max={quizQuota.max_credits}
+              remaining={quizQuota.remaining_credits/2}
+              max={quizQuota.max_credits/2}
               secondsUntilReset={quizQuota.seconds_until_reset}
               disabled={!canGenerateQuiz}
             />

@@ -101,7 +101,7 @@ export default function RegisterPage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <Card className="w-full max-w-md bg-card/50 shadow-2xl shadow-primary/10">
+      <Card className="w-full max-w-md bg-sidebar/40 shadow-2xl shadow-primary/10">
         <CardHeader className="space-y-1">
           {/* Back button */}
           <Button
@@ -195,7 +195,9 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <Button onClick={() => handleSubmit()} className="w-full">Create account</Button>
+          <Button onClick={() => handleSubmit()} className="w-full">
+            Create account
+          </Button>
 
           <div className="text-center mt-2 text-sm text-muted-foreground">
             Already have an account?{" "}
