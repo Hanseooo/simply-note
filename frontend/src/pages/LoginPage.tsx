@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLogin } from "@/hooks/useLogin";
 import { useState } from "react";
@@ -152,8 +152,11 @@ export default function LoginPage() {
             </Button>
           </div>
 
-          <Button className="w-full" onClick={() => handleSubmit()}>
-            Login
+          <Button
+            disabled={login.isPending}
+            className="w-full"
+            onClick={() => handleSubmit()}>
+            {login.isPending ? (<Loader2 className="animate-spin" />) : "Login"}
           </Button>
 
           <div className="text-center mt-2 text-sm text-muted-foreground">

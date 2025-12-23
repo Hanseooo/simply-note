@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 // import { useAuthStore } from "@/store/useAuthStore";
 import { useRegister } from "@/hooks/useRegister";
@@ -202,10 +202,11 @@ export default function RegisterPage() {
           <div className="text-center mt-2 text-sm text-muted-foreground">
             Already have an account?{" "}
             <button
+              disabled={register.isPending}
               onClick={() => navigate({ to: "/login" })}
               className="underline underline-offset-4 text-primary font-medium hover:text-primary/80 transition-colors"
             >
-              Sign in
+              {register.isPending ? (<Loader2 className="animate-spin" />) : "Sign up"}
             </button>
           </div>
         </CardContent>
