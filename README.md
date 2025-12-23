@@ -6,6 +6,8 @@
 ![Backend](https://img.shields.io/badge/backend-Django%20%7C%20DRF-blueviolet)
 ![Database](https://img.shields.io/badge/database-PostgreSQL%20(Neon)-blueviolet)
 ![Hosting](https://img.shields.io/badge/hosting-Vercel%20%2B%20Render-blueviolet)
+[![Live Demo](https://img.shields.io/badge/live-demo-red?style=for-the-badge)](https://simplynote-ai.vercel.app/)
+
 
 **SimplyNote** is an **AI-powered learning productivity platform** that helps students and self-learners study smarter using their *own content*.
 
@@ -16,6 +18,12 @@ It transforms raw notes into:
 
 > **Status:** ✅ Production-ready  
 > Includes authentication, AI usage limits, feedback system, and cloud deployment.
+
+## 🌐 Live Demo
+
+🚀 **View the live application:**  
+👉 https://simplynote-ai.vercel.app/
+
 
 ---
 
