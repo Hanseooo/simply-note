@@ -19,11 +19,6 @@ class GenerateRoadmapAPIView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_classes = [AIGenerationBurstThrottle]
     def post(self, request):
-        AIQuotaService.consume(
-            user=request.user,
-            bucket=AIQuotaBucket.BUCKET_GENERAL,
-            cost=AICreditCost.ROADMAP_FLASH_LITE,
-        )
 
         topic = request.data.get("topic")
         diagram_type = request.data.get("diagram_type")
@@ -49,6 +44,12 @@ class GenerateRoadmapAPIView(APIView):
             return Response(
                 {"detail": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        
+        AIQuotaService.consume(
+            user=request.user,
+            bucket=AIQuotaBucket.BUCKET_GENERAL,
+            cost=AICreditCost.ROADMAP_FLASH_LITE,
             )
 
         # Save generated roadmap to DB

@@ -24,11 +24,6 @@ class SummarizeNotesAPIView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_classes = [AIGenerationBurstThrottle]
     def post(self, request):
-        AIQuotaService.consume(
-             user=request.user,
-            bucket=AIQuotaBucket.BUCKET_GENERAL,
-            cost=AICreditCost.SUMMARIZE_FLASH_LITE,
-        )
         original_text = request.data.get("text")
 
         if not original_text:
@@ -36,6 +31,7 @@ class SummarizeNotesAPIView(APIView):
                 {"detail": "Text is required"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+            
         try:
             raw_output = generate_json_content(
                 system_prompt=SYSTEM_PROMPT,
@@ -76,6 +72,11 @@ class SummarizeNotesAPIView(APIView):
                 },
                 status=status.HTTP_502_BAD_GATEWAY
             )
+        AIQuotaService.consume(
+             user=request.user,
+            bucket=AIQuotaBucket.BUCKET_GENERAL,
+            cost=AICreditCost.SUMMARIZE_FLASH_LITE,
+        )
 
         return Response(serializer.validated_data)
 
