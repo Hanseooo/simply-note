@@ -6,10 +6,18 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), tanstackRouter({
-    target: 'react',
-    autoCodeSplitting: true,
-  })],
+  plugins: [
+    react(),
+    tailwindcss(),
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+    }),
+  ],
+  build: {
+    outDir: "dist", 
+  },
+  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
