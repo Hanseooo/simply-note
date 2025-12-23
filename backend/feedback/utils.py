@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.utils import timezone
 from .models import Feedback
 
-COOLDOWN_DAYS = 3
+COOLDOWN_MINUTES = 5
 
 def can_submit_feedback(user):
     if not user:
@@ -19,4 +19,4 @@ def can_submit_feedback(user):
     if not last_feedback:
         return True
 
-    return timezone.now() >= last_feedback.created_at + timedelta(days=COOLDOWN_DAYS)
+    return timezone.now() >= last_feedback.created_at + timedelta(minutes=COOLDOWN_MINUTES)

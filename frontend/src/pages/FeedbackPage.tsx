@@ -163,7 +163,7 @@ return (
 
             {cooldownError && (
               <p className="text-sm text-destructive">
-                You can only send feedback once every 3 days.
+                You can only send feedback once every 5 minutes.
               </p>
             )}
 
