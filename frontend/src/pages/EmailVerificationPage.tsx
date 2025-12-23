@@ -118,6 +118,9 @@ export default function EmailVerificationPage() {
           >
             Verify email
           </Button>
+          <div className="text-sm text-muted-foreground/50 text-center">
+            check the spam folder if you don't see the email verification code
+          </div>
 
           <div className="text-center text-sm text-muted-foreground">
             Didn’t receive the code?{" "}
