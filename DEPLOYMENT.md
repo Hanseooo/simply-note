@@ -1,4 +1,4 @@
-# SimplyNote AI – System Deployment Documentation
+# SimplyNote – System Deployment Documentation
 
 ## Table of Contents
 
