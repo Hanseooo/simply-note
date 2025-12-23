@@ -92,7 +92,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/home" })}
                   className="cursor-pointer"
                 >
-                  <Home />
+                  <Home className="mr-2 h-4 w-4" />
                   Home
                 </DropdownMenuItem>
 
@@ -102,7 +102,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/notes" })}
                   className="cursor-pointer"
                 >
-                  <Notebook />
+                  <Notebook className="mr-2 h-4 w-4" />
                   Notes
                 </DropdownMenuItem>
 
@@ -112,7 +112,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/quizzes" })}
                   className="cursor-pointer"
                 >
-                  <PenBoxIcon />
+                  <PenBoxIcon className="mr-2 h-4 w-4" />
                   Quizzes
                 </DropdownMenuItem>
 
@@ -122,7 +122,7 @@ export default function Navbar() {
                   onClick={() => navigate({ to: "/roadmaps" })}
                   className="cursor-pointer"
                 >
-                  <Map />
+                  <Map className="mr-2 h-4 w-4" />
                   Roadmaps
                 </DropdownMenuItem>
               </div>

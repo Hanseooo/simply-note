@@ -195,8 +195,8 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <Button onClick={() => handleSubmit()} className="w-full">
-            Create account
+          <Button disabled={register.isPending} onClick={() => handleSubmit()} className="w-full">
+            {register.isPending ? (<Loader2 className="animate-spin" />) : "Create Account"}
           </Button>
 
           <div className="text-center mt-2 text-sm text-muted-foreground">
@@ -206,7 +206,7 @@ export default function RegisterPage() {
               onClick={() => navigate({ to: "/login" })}
               className="underline underline-offset-4 text-primary font-medium hover:text-primary/80 transition-colors"
             >
-              {register.isPending ? (<Loader2 className="animate-spin" />) : "Sign up"}
+              Sign in
             </button>
           </div>
         </CardContent>
