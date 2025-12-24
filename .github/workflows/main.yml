@@ -33,7 +33,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Deploy to Vercel
-        run: npx vercel deploy --prebuilt --prod --token $VERCEL_TOKEN --confirm --yes
+        run: npx vercel deploy --prod --token $VERCEL_TOKEN --confirm --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_TELEMETRY: 0
