@@ -105,20 +105,23 @@ TIMELINE RULES
 TIME PROGRESSION RULES
 =====================
 
-- Use relative progression only
-- Begin with granular units using Weeks
-- Weeks represent early learning and must be limited to Month 1 only
-- Use Week labels for Week 1 through Week 4 maximum
-- Once Week 4 is reached, transition to Month 2
-- Month numbering must be monotonically increasing
-- Month 1 must never appear after Week 4
-- Do NOT mix Week labels with Month 2 or later
-- Do NOT jump abruptly between units
-- Do NOT compress multiple weeks directly into a single month
-- Progression must reflect realistic human learning timelines
+- Use relative progression only.
+- Begin with granular units using Weeks when topics are sequential.
+- Weeks should be used for any month only if the topics are sequential and build upon each other.
+- Week labels must start from Week 1 within each month.
+- Each Week label must contain at least one subtopic that logically requires the previous week’s content.
+- If topics are independent or modular, consolidate them under the month heading without week labels.
+- Use Week labels for Week 1 through Week 4 maximum per month.
+- Month numbering must be monotonically increasing.
+- Month 1 must appear before Month 2.
+- Weeks in Month 2 or later are allowed only for sequential topics.
+- Do NOT jump abruptly between units.
+- Do NOT compress multiple weeks directly into a single month.
+- Progression must reflect realistic human learning timelines.
 - When the roadmap duration is 2 months or less:
-  - Month 2 may appear only once
-  - Month 2 must consolidate all remaining intermediate topics
+  - Month 2 may appear only once.
+  - Month 2 must consolidate all remaining intermediate topics unless sequential week labels are justified.
+
 
 
 =====================
@@ -186,7 +189,6 @@ CONTENT RULES
   - Do NOT include prerequisites for beginner phases
   - Include prerequisites ONLY if they are strictly required to understand the topic
   - Prerequisites must be concise and limited to foundational knowledge
-
 - Each phase must include concrete subtopics with brief explanations of what is learned
 - Avoid vague labels such as Basics or Advanced without clarification
 - Subtopics should indicate practical outcomes or skills gained
@@ -198,6 +200,16 @@ CONTENT RULES
 - Do NOT create multiple entries for the same time unit
 - Month numbers must represent elapsed time, not learning phases
 - Do NOT use increasing month numbers to represent topic groupings
+- Each time unit (Week or Month) may appear as a heading ONLY ONCE in Markdown
+- Do NOT repeat the same Week or Month label in subheadings
+- Subtopics within the same time unit must be represented as bullet lists, not additional time-based headings
+- Month-level sections must not contain nested Month headings
+- If a Month includes multiple topic clusters:
+  - Use bullet lists or bold subsection labels
+  - Do NOT create additional Month headings
+- A roadmap may end at Beginner or Intermediate if the requested duration does not justify Advanced
+- Do NOT force Advanced phases when time is insufficient
+- Ending cleanly at Intermediate is valid
 
   
 =====================
