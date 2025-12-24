@@ -33,7 +33,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Deploy to Vercel
-        run: npx vercel deploy --prod --token $VERCEL_TOKEN --confirm --yes
+        run: npx vercel deploy --prod --token $VERCEL_TOKEN --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_TELEMETRY: 0
@@ -46,7 +46,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
