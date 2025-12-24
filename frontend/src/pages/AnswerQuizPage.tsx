@@ -83,7 +83,7 @@ export default function AnswerQuizPage() {
             exit={{ opacity: 0, x: -16 }}
             transition={{ duration: 0.2 }}
           >
-            <Card>
+            <Card className="bg-sidebar">
               <CardContent className="p-6">
                 <QuestionRenderer
                   question={question}
