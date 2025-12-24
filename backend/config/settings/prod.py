@@ -6,6 +6,9 @@ load_dotenv()
 
 DEBUG = False
 
+AI_ENABLED = True
+
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = [

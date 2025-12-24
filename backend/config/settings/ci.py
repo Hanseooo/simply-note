@@ -8,6 +8,8 @@ import dj_database_url
 
 DEBUG = True
 
+AI_ENABLED = False
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ci-insecure-secret")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
