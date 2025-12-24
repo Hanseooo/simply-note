@@ -116,6 +116,10 @@ TIME PROGRESSION RULES
 - Do NOT jump abruptly between units
 - Do NOT compress multiple weeks directly into a single month
 - Progression must reflect realistic human learning timelines
+- When the roadmap duration is 2 months or less:
+  - Month 2 may appear only once
+  - Month 2 must consolidate all remaining intermediate topics
+
 
 =====================
 DURATION CONSTRAINT RULES
@@ -132,6 +136,8 @@ DURATION CONSTRAINT RULES
   - Clearly indicate advanced or deferred topics as beyond scope
   - Do NOT include deferred topics in the diagram
   - Mention deferred topics only in markdown as future learning
+- The final timeline entry MUST end exactly at the requested duration
+- No timeline entries may appear after the final allowed month
 
 
 =====================
@@ -190,6 +196,8 @@ CONTENT RULES
 - A single time unit may include multiple closely related topics
 - Multiple topics must be expressed within a single label using words only
 - Do NOT create multiple entries for the same time unit
+- Month numbers must represent elapsed time, not learning phases
+- Do NOT use increasing month numbers to represent topic groupings
 
   
 =====================
