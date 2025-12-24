@@ -74,19 +74,24 @@ jobs:
           pip install -r requirements.txt
         working-directory: ./backend
       
+      - name: Wait for Postgres
+        run: sleep 10
+        working-directory: ./backend
+
       - name: Run Django Migrations
         env:
           DJANGO_ENV: ci
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: python manage.py migrate
         working-directory: ./backend
-      
+
       - name: Run Django Tests
         env:
           DJANGO_ENV: ci
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: python manage.py test
         working-directory: ./backend
+
 
 
       # Optional: deploy backend to Render
