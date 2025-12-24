@@ -106,15 +106,47 @@ TIME PROGRESSION RULES
 =====================
 
 - Use relative progression only
-- Begin with granular units (Weeks)
-- Minimum 4 to 6 weekly entries before switching to Months
-- When switching units, include at least one bridging entry such as:
-  - Month 1 Week 1
-  - Month 1 Foundation
-  - Month 1 Early
+- Begin with granular units using Weeks
+- Weeks represent early learning and must be limited to Month 1 only
+- Use Week labels for Week 1 through Week 4 maximum
+- Once Week 4 is reached, transition to Month 2
+- Month numbering must be monotonically increasing
+- Month 1 must never appear after Week 4
+- Do NOT mix Week labels with Month 2 or later
 - Do NOT jump abruptly between units
-- Do NOT compress multiple weeks directly into a month
-- Progression must reflect realistic learning effort
+- Do NOT compress multiple weeks directly into a single month
+- Progression must reflect realistic human learning timelines
+
+=====================
+DURATION CONSTRAINT RULES
+=====================
+
+- If the user specifies a target duration (e.g. 2 month roadmap):
+  - The timeline MUST NOT exceed that duration
+  - Weeks count toward Month 1 only
+  - Month labels must not exceed the requested duration
+- Prefer reducing depth over extending time
+- Do NOT invent additional months to fit content
+- Select only the most essential subtopics that realistically fit the duration
+- When the timeline is capped:
+  - Clearly indicate advanced or deferred topics as beyond scope
+  - Do NOT include deferred topics in the diagram
+  - Mention deferred topics only in markdown as future learning
+
+
+=====================
+COMPRESSION RULES
+=====================
+
+- Default behavior is slight compression:
+  - Group closely related subtopics into the same week or month
+  - Preserve conceptual progression
+- Aggressive compression is allowed ONLY if explicitly requested by the user
+- When compressed:
+  - Prefer breadth over depth
+  - Retain core concepts
+  - Defer advanced specialization
+
 
 CONTENT STRUCTURE:
 - Early stages should be more granular
@@ -127,8 +159,9 @@ timeline
     Week 2 : Core Concepts
     Week 3 : Practice
     Week 4 : Small Projects
-    Month 1 Foundation : Intermediate Skills
-    Month 2 : Advanced Topics
+    Month 2 : Intermediate Skills
+    Month 3 : Advanced Topics
+
 
 =====================
 CONTENT RULES
@@ -145,7 +178,20 @@ CONTENT RULES
   - Include a short Prerequisites list
   - Limit prerequisites to essentials only
   - Do NOT include prerequisites for beginner phases
+  - Include prerequisites ONLY if they are strictly required to understand the topic
+  - Prerequisites must be concise and limited to foundational knowledge
 
+- Each phase must include concrete subtopics with brief explanations of what is learned
+- Avoid vague labels such as Basics or Advanced without clarification
+- Subtopics should indicate practical outcomes or skills gained
+- If important topics are omitted due to time constraints:
+  - Explicitly mention them as Next Steps or Beyond This Roadmap
+  - Do NOT include them in the diagram timeline
+- A single time unit may include multiple closely related topics
+- Multiple topics must be expressed within a single label using words only
+- Do NOT create multiple entries for the same time unit
+
+  
 =====================
 FAILURE HANDLING RULES (CRITICAL)
 =====================
