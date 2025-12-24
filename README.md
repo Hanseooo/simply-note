@@ -21,7 +21,7 @@ It transforms raw notes into:
 
 ## 🌐 Live Demo
 
-🚀 **View the live application:**  
+👾 **View the live application:**  
 👉 https://simplynote-ai.vercel.app/
 
 
@@ -146,8 +146,9 @@ SimplyNote is built around **clarity, trust, and effective learning**.
 
 ## 📄 Documentation
 
-- 📦 **Deployment guide:** [deployment.md](./DEPLOYMENT.md)
+- 📦 **Deployment guide:** [DEPLOYMENT.md](./DEPLOYMENT.md)
 - ⚖️ **License:** [CC BY-NC 4.0](./LICENSE.md)
+- 🚦 **CI/CD docs** [CICD](./CICD.md)
 
 
 ---

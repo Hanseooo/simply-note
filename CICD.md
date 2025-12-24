@@ -2,80 +2,74 @@
 
 This document explains the **GitHub Actions CI/CD workflow** for the monorepo project consisting of:
 
-- **Frontend:** Vite + React + TanStack Router (hosted on Vercel)
-- **Backend:** Django REST Framework with PostgreSQL (hosted on Render)
+- **Frontend:** Vite + React + TanStack Router (deployed on Vercel)
+- **Backend:** Django REST Framework + PostgreSQL (tested in CI, deployed separately)
 
 ---
 
 ## Workflow Overview
 
-The CI/CD workflow is defined in `.github/workflows/main.yml` and is triggered on:
+The CI/CD workflow is defined in:
 
-- **Push** to `main` branch
+```
+.github/workflows/main.yml
+```
+
+It runs on:
+
+- **Push** to `main`
 - **Pull requests** targeting `main`
 
-The workflow consists of **two jobs**:
+The workflow contains **two jobs**:
 
-1. **Frontend:** Build & deploy to Vercel
-2. **Backend:** Run Django migrations and tests
+1. **Frontend** – build & deploy to Vercel
+2. **Backend** – run Django migrations and tests
 
-The backend job **depends on the frontend job** (`needs: frontend`).
+The backend job runs **after** the frontend job using:
+
+```yaml
+needs: frontend
+```
 
 ---
 
-## Frontend Job
+## Frontend Job (Vercel)
 
-### Steps
+### Responsibilities
+- Install dependencies
+- Prebuild TanStack Route Tree
+- Build the production bundle
+- Deploy to Vercel using the CLI
 
-1. **Checkout Code**
-```yaml
-uses: actions/checkout@v4
+### Key Steps
+
+- Node version: **20**
+- Working directory: `./frontend`
+- Build output: `dist`
+- Deployment command:
+```bash
+npx vercel deploy --prod --yes
 ```
 
-2. **Setup Node.js**
-```yaml
-uses: actions/setup-node@v3
-with:
-  node-version: '20'
-```
+### Required Secret
 
-3. **Install Dependencies**
-```yaml
-run: npm install
-working-directory: ./frontend
-```
+| Name | Description |
+|----|------------|
+| `VERCEL_TOKEN` | Personal Vercel token with project scope |
 
-4. **Prebuild RouteGenTree**
-```yaml
-run: npm run prebuild
-working-directory: ./frontend
+Telemetry is disabled in CI using:
+```bash
+VERCEL_TELEMETRY=0
 ```
-
-5. **Build Frontend**
-```yaml
-run: npm run build
-working-directory: ./frontend
-```
-
-6. **Deploy to Vercel**
-```yaml
-run: npx vercel deploy --prod --token $VERCEL_TOKEN --yes
-env:
-  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-  VERCEL_TELEMETRY: 0
-working-directory: ./frontend
-```
-- Automatically detects project settings
-- Output directory: `dist`
-- CLI telemetry disabled for CI
 
 ---
 
-## Backend Job
+## Backend Job (Django)
 
-### Services
+### PostgreSQL Service
 
-- **PostgreSQL 17** container for CI
+The backend job spins up a PostgreSQL **17** service container:
+
 ```yaml
 services:
   postgres:
@@ -84,64 +78,60 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: test_db
-    ports:
-      - 5432:5432
-    options: >-
-      --health-cmd "pg_isready -U postgres"
-      --health-interval 10s
-      --health-timeout 5s
-      --health-retries 5
 ```
 
-### Steps
+This database is only used for **CI testing**.
 
-1. **Checkout Code**
-```yaml
-uses: actions/checkout@v4
-```
+---
 
-2. **Setup Python**
-```yaml
-uses: actions/setup-python@v4
-with:
-  python-version: '3.12'
-```
+### Backend Steps
 
-3. **Install Dependencies**
-```yaml
-run: |
-  pip install --upgrade pip
-  pip install -r requirements.txt
-working-directory: ./backend
-```
+- Python version: **3.12**
+- Working directory: `./backend`
 
-4. **Run Django Migrations**
-```yaml
-run: python manage.py migrate
-env:
-  DJANGO_ENV: ci
-  DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-working-directory: ./backend
-```
+Steps executed:
 
-5. **Run Django Tests**
-```yaml
-run: python manage.py test
-env:
-  DJANGO_ENV: ci
-  DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-working-directory: ./backend
+1. Install dependencies
+2. Run migrations
+3. Run test suite
+
+Commands:
+```bash
+python manage.py migrate --settings=config.settings.ci
+python manage.py test --settings=config.settings.ci
 ```
 
 ---
 
-## Django Settings for CI
+## Django Settings Structure
+
+The project uses **environment-based settings loading**.
+
+### `config/settings/__init__.py`
+```python
+import os
+
+ENV = os.getenv("DJANGO_ENV", "dev")
+
+if ENV == "prod":
+    from .prod import *
+elif ENV == "ci":
+    from .ci import *
+else:
+    from .dev import *
+```
+
+---
+
+### CI Settings
 
 **`config/settings/ci.py`**
 ```python
 from .base import *
 
 DEBUG = True
+
+AI_ENABLED = False
 
 DATABASES = {
     "default": {
@@ -155,65 +145,77 @@ DATABASES = {
 }
 ```
 
-**`config/settings/settings.py`**
-```python
-import os
-ENV = os.getenv("DJANGO_ENV", "dev")
+### Why AI is Disabled in CI
 
-if ENV == "prod":
-    from .prod import *
-elif ENV == "ci":
-    from .ci import *
-else:
-    from .dev import *
+- CI does **not** have access to Gemini API keys
+- Django imports all URLs during migrations/tests
+- AI clients are initialized lazily and guarded by `AI_ENABLED`
+
+This prevents CI failures caused by missing external services.
+
+---
+
+### Dev / Prod Settings
+
+```python
+AI_ENABLED = True
 ```
 
-- Ensures CI uses local PostgreSQL container
-- `DJANGO_ENV=ci` in workflow points to `ci.py`
+- Gemini is enabled only in real environments
+- API keys are provided via environment variables
 
 ---
 
-## Environment Variables / Secrets
+## AI Architecture (Important)
 
-### Frontend
-- `VERCEL_TOKEN` → Personal Vercel token with project-level scope
+- Gemini client initialization lives **only** in `gemini_client.py`
+- Views never import or initialize AI clients directly
+- When `AI_ENABLED = False`, AI calls raise a controlled exception
 
-### Backend (optional Render deployment)
-- `RENDER_API_KEY` → Render API key if deploying backend automatically
-
-### Django CI
-- `DJANGO_ENV=ci` → Loads CI-specific settings
-- `DATABASE_URL` → PostgreSQL URL for testing
+This design ensures:
+- CI stability
+- Clean separation of concerns
+- No import-time side effects
 
 ---
 
-## Notes / Best Practices
+## Environment Variables
 
-1. **Monorepo paths:**
-   - Frontend: `./frontend`
-   - Backend: `./backend`
+### CI
+| Variable | Purpose |
+|-------|--------|
+| `DJANGO_ENV=ci` | Loads CI settings |
+| `DATABASE_URL` | PostgreSQL connection (optional) |
 
-2. **Caching (optional)**
-   - Node modules: `./frontend/node_modules`
-   - Pip cache: `~/.cache/pip`
+### Dev / Prod
+| Variable | Purpose |
+|-------|--------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `DJANGO_ENV` | `dev` or `prod` |
 
-3. **Order of Jobs:**
-   - Frontend must complete before backend runs migrations/tests
+---
 
-4. **Vercel CLI:**
-   - Use `--yes` instead of deprecated `--confirm`
-   - Disable telemetry with `VERCEL_TELEMETRY=0`
+## Branch & PR Behavior
 
-5. **PostgreSQL Version:**
-   - CI uses PostgreSQL 17 to match production
-   - Compatible with Django migrations and tests
+- Workflow **runs on PRs targeting `main`**
+- GitHub always executes the workflow file **from the PR source branch**
+- Merging `develop → main` runs CI using the workflow defined in `develop`
+
+---
+
+## Best Practices
+
+- Never initialize external services at import time
+- Keep CI deterministic and isolated
+- Guard optional integrations with feature flags
+- Use service containers for databases
+- Keep workflows in version control per branch
 
 ---
 
 ## References
 
-- [GitHub Actions Docs](https://docs.github.com/en/actions)
-- [Vercel CLI Docs](https://vercel.com/docs/cli)
-- [Django Testing Docs](https://docs.djangoproject.com/en/6.0/topics/testing/)
-- [PostgreSQL Docker Image](https://hub.docker.com/_/postgres)
-
+- GitHub Actions: https://docs.github.com/en/actions
+- Django Testing: https://docs.djangoproject.com/en/stable/topics/testing/
+- Vercel CLI: https://vercel.com/docs/cli
+- PostgreSQL Docker Image: https://hub.docker.com/_/postgres
