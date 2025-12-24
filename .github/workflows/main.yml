@@ -40,7 +40,7 @@ jobs:
         working-directory: ./frontend
 
   backend:
-    name: Run Django Tests
+    name: Run Django Tests (CI)
     runs-on: ubuntu-latest
     needs: frontend
 
@@ -66,43 +66,36 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install backend dependencies
+        working-directory: ./backend
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-        working-directory: ./backend
-      
-      - name: Wait for Postgres
-        run: sleep 10
-        working-directory: ./backend
 
-      - name: Run Django Migrations
-        env:
-          DJANGO_ENV: ci
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: python manage.py migrate
-        working-directory: ./backend
+      - name: Wait for Postgres to be ready
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 -U postgres && break
+            sleep 2
+          done
 
-      - name: Run Django Tests
-        env:
-          DJANGO_ENV: ci
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: python manage.py test
+      - name: Run Django migrations (CI)
         working-directory: ./backend
-
-      - name: Run Django Migrations
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: python manage.py migrate --settings=config.settings.ci
-        working-directory: ./backend
+        run: |
+          python manage.py migrate --settings=config.settings.ci
 
-      - name: Run Django Tests
+      - name: Run Django tests (CI)
+        working-directory: ./backend
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: python manage.py test --settings=config.settings.ci
-        working-directory: ./backend
+        run: |
+          python manage.py test --settings=config.settings.ci
+
+
 
 
       # Optional: deploy backend to Render
