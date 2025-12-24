@@ -59,7 +59,7 @@ if (isError || !data) {
       />
 
       <div className="px-4 sm:px-6">
-        <Card className="mt-6 max-w-4xl mx-auto">
+        <Card className="mt-6 max-w-4xl mx-auto bg-sidebar">
           <CardHeader>
             <CardTitle className="text-2xl sm:text-4xl border-b pb-6 font-bold text-primary text-center">
               Learning Roadmap
@@ -77,7 +77,10 @@ if (isError || !data) {
             <h3 className="text-lg font-semibold mb-4 text-center">
               Roadmap Diagram
             </h3>
-            <MermaidRenderer code={data.diagram_code} chartType={data.diagram_type} />
+            <MermaidRenderer
+              code={data.diagram_code}
+              chartType={data.diagram_type}
+            />
           </CardContent>
 
           {/* Milestones */}
@@ -119,7 +122,6 @@ if (isError || !data) {
                   Save
                 </Button>
               )}
-
             </div>
           </CardFooter>
         </Card>

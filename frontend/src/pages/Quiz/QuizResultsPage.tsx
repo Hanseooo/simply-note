@@ -59,7 +59,7 @@ export default function QuizResultPage() {
 
         {/* Charts */}
         <div className="grid gap-6">
-          <Card className="border-primary h-72 sm:h-80 md:h-96">
+          <Card className="border-primary bg-sidebar h-72 sm:h-80 md:h-96">
             <CardContent className="p-4 h-full">
               <h2 className="font-medium mb-2 text-primary">Topic Mastery</h2>
               <div className="h-full">
@@ -68,7 +68,7 @@ export default function QuizResultPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-primary h-72 sm:h-80 md:h-96">
+          <Card className="border-primary bg-sidebar h-72 sm:h-80 md:h-96">
             <CardContent className="p-4 h-full">
               <h2 className="font-medium mb-2 text-primary">Score Breakdown</h2>
               <div className="h-full">
@@ -92,7 +92,7 @@ export default function QuizResultPage() {
                 String(q.answer).toLowerCase();
 
             return (
-              <Card className="border-primary/25" key={q.id}>
+              <Card className="border-primary/25 bg-sidebar" key={q.id}>
                 <CardContent className="p-5 space-y-4">
                   {/* Question */}
                   <div className="text-lg font-medium whitespace-normal wrap-break-words">
@@ -146,7 +146,7 @@ export default function QuizResultPage() {
               variant={"outline"}
               onClick={() => {
                 resetQuiz();
-                navigate({ to: "/quiz/$quizId" , params: {quizId : quizId}});
+                navigate({ to: "/quiz/$quizId", params: { quizId: quizId } });
               }}
               className="text-primary font-bold"
             >
