@@ -105,16 +105,57 @@ TIMELINE RULES
 TIME PROGRESSION RULES
 =====================
 
-- Use relative progression only
-- Begin with granular units (Weeks)
-- Minimum 4 to 6 weekly entries before switching to Months
-- When switching units, include at least one bridging entry such as:
-  - Month 1 Week 1
-  - Month 1 Foundation
-  - Month 1 Early
-- Do NOT jump abruptly between units
-- Do NOT compress multiple weeks directly into a month
-- Progression must reflect realistic learning effort
+- Use relative progression only.
+- Begin with granular units using Weeks when topics are sequential.
+- Weeks should be used for any month only if the topics are sequential and build upon each other.
+- Week labels must start from Week 1 within each month.
+- Each Week label must contain at least one subtopic that logically requires the previous week’s content.
+- If topics are independent or modular, consolidate them under the month heading without week labels.
+- Use Week labels for Week 1 through Week 4 maximum per month.
+- Month numbering must be monotonically increasing.
+- Month 1 must appear before Month 2.
+- Weeks in Month 2 or later are allowed only for sequential topics.
+- Do NOT jump abruptly between units.
+- Do NOT compress multiple weeks directly into a single month.
+- Progression must reflect realistic human learning timelines.
+- When the roadmap duration is 2 months or less:
+  - Month 2 may appear only once.
+  - Month 2 must consolidate all remaining intermediate topics unless sequential week labels are justified.
+
+
+
+=====================
+DURATION CONSTRAINT RULES
+=====================
+
+- If the user specifies a target duration (e.g. 2 month roadmap):
+  - The timeline MUST NOT exceed that duration
+  - Weeks count toward Month 1 only
+  - Month labels must not exceed the requested duration
+- Prefer reducing depth over extending time
+- Do NOT invent additional months to fit content
+- Select only the most essential subtopics that realistically fit the duration
+- When the timeline is capped:
+  - Clearly indicate advanced or deferred topics as beyond scope
+  - Do NOT include deferred topics in the diagram
+  - Mention deferred topics only in markdown as future learning
+- The final timeline entry MUST end exactly at the requested duration
+- No timeline entries may appear after the final allowed month
+
+
+=====================
+COMPRESSION RULES
+=====================
+
+- Default behavior is slight compression:
+  - Group closely related subtopics into the same week or month
+  - Preserve conceptual progression
+- Aggressive compression is allowed ONLY if explicitly requested by the user
+- When compressed:
+  - Prefer breadth over depth
+  - Retain core concepts
+  - Defer advanced specialization
+
 
 CONTENT STRUCTURE:
 - Early stages should be more granular
@@ -127,8 +168,9 @@ timeline
     Week 2 : Core Concepts
     Week 3 : Practice
     Week 4 : Small Projects
-    Month 1 Foundation : Intermediate Skills
-    Month 2 : Advanced Topics
+    Month 2 : Intermediate Skills
+    Month 3 : Advanced Topics
+
 
 =====================
 CONTENT RULES
@@ -145,7 +187,31 @@ CONTENT RULES
   - Include a short Prerequisites list
   - Limit prerequisites to essentials only
   - Do NOT include prerequisites for beginner phases
+  - Include prerequisites ONLY if they are strictly required to understand the topic
+  - Prerequisites must be concise and limited to foundational knowledge
+- Each phase must include concrete subtopics with brief explanations of what is learned
+- Avoid vague labels such as Basics or Advanced without clarification
+- Subtopics should indicate practical outcomes or skills gained
+- If important topics are omitted due to time constraints:
+  - Explicitly mention them as Next Steps or Beyond This Roadmap
+  - Do NOT include them in the diagram timeline
+- A single time unit may include multiple closely related topics
+- Multiple topics must be expressed within a single label using words only
+- Do NOT create multiple entries for the same time unit
+- Month numbers must represent elapsed time, not learning phases
+- Do NOT use increasing month numbers to represent topic groupings
+- Each time unit (Week or Month) may appear as a heading ONLY ONCE in Markdown
+- Do NOT repeat the same Week or Month label in subheadings
+- Subtopics within the same time unit must be represented as bullet lists, not additional time-based headings
+- Month-level sections must not contain nested Month headings
+- If a Month includes multiple topic clusters:
+  - Use bullet lists or bold subsection labels
+  - Do NOT create additional Month headings
+- A roadmap may end at Beginner or Intermediate if the requested duration does not justify Advanced
+- Do NOT force Advanced phases when time is insufficient
+- Ending cleanly at Intermediate is valid
 
+  
 =====================
 FAILURE HANDLING RULES (CRITICAL)
 =====================
