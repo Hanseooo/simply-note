@@ -40,11 +40,49 @@ export default function AdminFeedbackPage() {
   const data = feedbackQuery.data;
   const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
+const loadedRatings =
+  data?.results.filter(
+    (f) => f.feedback_type === "rating" && typeof f.rating === "number"
+  ) ?? [];
+
+const loadedBugs = data?.results.filter((f) => f.feedback_type === "bug") ?? [];
+
+const loadedSuggestions =
+  data?.results.filter((f) => f.feedback_type === "suggestion") ?? [];
+
+const averageRating =
+  loadedRatings.length > 0
+    ? (
+        loadedRatings.reduce((sum, r) => sum + (r.rating ?? 0), 0) /
+        loadedRatings.length
+      ).toFixed(1)
+    : null;
+
+
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">
       {/* ---------- HEADER ---------- */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-semibold text-primary">User Feedback</h1>
+        <div className="flex flex-wrap gap-2 text-sm">
+          <Badge variant="outline">
+            <Star className="text-primary" /> Ratings: {loadedRatings.length}
+          </Badge>
+          <Badge variant="outline">
+            {" "}
+            <Bug className="text-primary" /> Bugs: {loadedBugs.length}
+          </Badge>
+          <Badge variant="outline">
+            <Lightbulb className="text-primary" /> Suggestions:{" "}
+            {loadedSuggestions.length}
+          </Badge>
+
+          {averageRating && (
+            <Badge variant="secondary">
+              <Star className="text-primary" /> Avg: {averageRating}
+            </Badge>
+          )}
+        </div>
 
         <div className="flex flex-wrap gap-2">
           <Select
@@ -52,6 +90,10 @@ export default function AdminFeedbackPage() {
             onValueChange={(v) => {
               setPage(1);
               setFeedbackType(v as any);
+
+              if (v !== "rating") {
+                setRating("all");
+              }
             }}
           >
             <SelectTrigger className="w-37.5">
@@ -72,7 +114,10 @@ export default function AdminFeedbackPage() {
               setRating(v);
             }}
           >
-            <SelectTrigger className="w-37.5">
+            <SelectTrigger
+              className="w-37.5"
+              disabled={feedbackType !== "rating"}
+            >
               <SelectValue placeholder="Rating" />
             </SelectTrigger>
             <SelectContent>
