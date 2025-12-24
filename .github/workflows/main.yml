@@ -33,7 +33,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Deploy to Vercel
-        run: npx vercel deploy --prod --token $VERCEL_TOKEN --confirm --yes
+        run: npx vercel deploy --prod --token $VERCEL_TOKEN --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_TELEMETRY: 0
@@ -46,7 +46,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -74,20 +74,21 @@ jobs:
           pip install -r requirements.txt
         working-directory: ./backend
       
-      - name: Run Django Migrations
-        env:
-          DJANGO_ENV: ci
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: python manage.py migrate
-        working-directory: ./backend
-      
-      - name: Run Django Tests
-        env:
-          DJANGO_ENV: ci
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: python manage.py test
+      - name: Wait for Postgres
+        run: sleep 10
         working-directory: ./backend
 
+      - name: Run Django Migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+        run: python manage.py migrate --settings=config.settings.ci
+        working-directory: ./backend
+
+      - name: Run Django Tests
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+        run: python manage.py test --settings=config.settings.ci
+        working-directory: ./backend
 
       # Optional: deploy backend to Render
       # - name: Deploy Backend to Render
