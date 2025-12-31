@@ -11,7 +11,7 @@ import { getGeneralAIQuota, useAIQuota } from "@/hooks/useAiQuota";
 import { AIQuotaProgress } from "@/components/progress/AIQuotaProgress";
 
 const MIN_CHARS = 512;
-const MAX_CHARS = 7680;
+const MAX_CHARS = 10240;
 
 
 export default function NoteSummarizer() {
