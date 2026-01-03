@@ -37,7 +37,7 @@ export default function Footer() {
 
             <Button variant="link" size="sm" asChild>
               <a
-                href="https://hanseooo.vercel.app"
+                href="https://hanseoo.vercel.app"
                 target="_blank"
                 rel="noreferrer noopener"
               >
