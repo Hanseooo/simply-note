@@ -12,7 +12,7 @@ AI_ENABLED = True
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = [
-    os.getenv("RENDER_EXTERNAL_HOSTNAME"),
+    ".vercel.app",
 ]
 
 # --- Security ---
