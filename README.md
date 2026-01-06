@@ -148,7 +148,7 @@ SimplyNote is built around **clarity, trust, and effective learning**.
 
 - 📦 **Deployment guide:** [DEPLOYMENT.md](./DEPLOYMENT.md)
 - ⚖️ **License:** [CC BY-NC 4.0](./LICENSE.md)
-- 🚦 **CI/CD docs** [CICD](./CICD.md)
+- 🚦 **CI/CD docs:** [CICD](./CICD.md)
 
 
 ---
