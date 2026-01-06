@@ -63,6 +63,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 # Application definition
