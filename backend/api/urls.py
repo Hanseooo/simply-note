@@ -1,4 +1,5 @@
 from django.urls import path, include
+from .views import health_check
 
 
 urlpatterns = [
@@ -8,5 +9,6 @@ urlpatterns = [
     path('summaries/', include('summaries.urls')),
     path('roadmaps/', include('roadmaps.urls')),
     path('quizzes/', include('quizzes.urls')),
-    path('feedback/', include('feedback.urls'))
+    path('feedback/', include('feedback.urls')),
+    path('health_check/', health_check),
 ]
