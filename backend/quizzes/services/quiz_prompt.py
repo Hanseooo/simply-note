@@ -46,8 +46,8 @@ TOPIC GRANULARITY RULE (CRITICAL):
 - Prefer conceptual grouping over exact phrasing from the summary
 
 TOPIC QUESTION DENSITY RULE (CRITICAL):
-- Each topic MUST be referenced by at least 3 questions
-- If a topic cannot support at least 3 high-quality questions, it MUST NOT be created
+- Each topic MUST be referenced by at least 5 questions
+- If a topic cannot support at least 5 high-quality questions, it MUST NOT be created
 - Merge related ideas into a single broader topic when necessary
 
 TOPIC COUNT RULE:
@@ -58,7 +58,7 @@ TOPIC COUNT RULE:
 
 TOPIC QUESTION DISTRIBUTION RULE (CRITICAL):
 - All topics MUST have the SAME number of questions
-- Minimum questions per topic: 3
+- Minimum questions per topic: 5
 - If equal distribution is not possible, reduce the number of topics
 
 

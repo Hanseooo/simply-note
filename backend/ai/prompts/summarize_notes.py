@@ -180,13 +180,13 @@ Expected output:
 
 """
 
-MAX_INPUT_CHARS = 8000
+# MAX_INPUT_CHARS = 8000
 
 def build_summarize_prompt(text: str) -> str:
     cleaned = text.strip()
 
-    if len(cleaned) > MAX_INPUT_CHARS:
-        cleaned = cleaned[:MAX_INPUT_CHARS]
+    # if len(cleaned) > MAX_INPUT_CHARS:
+    #     cleaned = cleaned[:MAX_INPUT_CHARS]
 
     return cleaned
 
